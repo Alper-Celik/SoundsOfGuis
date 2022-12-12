@@ -7,27 +7,52 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      rec {
-        BuildTools = with pkgs; [ cmake ninja ];
-        RuntimeDeps = with pkgs; [ nlohmann_json libsndfile openal catch2_3 boost180 at-spi2-core ];
+    flake-utils.lib.eachDefaultSystem
+      (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        rec {
+          BuildTools = with pkgs; [
+            cmake
+            ninja
+            pkg-config
+          ];
+          RuntimeDeps = with pkgs; [
+            nlohmann_json
 
-        devShell = pkgs.mkShell {
-          buildInputs = RuntimeDeps;
-          nativeBuildInputs = BuildTools;
-        };
-        packages.default = pkgs.stdenv.mkDerivation
-          rec
-          {
-            pname = "SoundsOfGuis";
-            version = "0.0.0";
-            src = ./.;
+            libsndfile
+            flac
+            libogg
+
+            openal
+            catch2_3
+            boost180
+            libbacktrace
+
+            fmt_9
+            spdlog
+            at-spi2-core
+          ];
+
+          devShell = pkgs.mkShell {
+            buildInputs = RuntimeDeps;
             nativeBuildInputs = BuildTools;
-            BuildInputs = RuntimeDeps;
-          };
 
-      });
+            libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
+          };
+          packages.default = pkgs.stdenv.mkDerivation
+            rec
+            {
+              pname = "SoundsOfGuis";
+              version = "0.0.0";
+              src = ./.;
+              nativeBuildInputs = BuildTools;
+              BuildInputs = RuntimeDeps;
+
+
+              libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
+            };
+
+        });
 }
