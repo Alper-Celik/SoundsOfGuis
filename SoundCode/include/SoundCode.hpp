@@ -1,5 +1,7 @@
 #pragma once
-#include <al.h>
+
+#include "_SoundSource.hpp"
+
 #include <string>
 #include <tuple>
 #include <unordered_map>
@@ -13,11 +15,9 @@ struct element_info {
 };
 
 class SoundManager {
-  using buffer_handle_t = unsigned int;
-  using source_handle_t = unsigned int;
 
-  std::unordered_map<std::string, buffer_handle_t> sounds;
-  std::vector<std::tuple<std::string, element_info, source_handle_t>> elements;
+  std::unordered_map<std::string, unsigned int> sounds;
+  std::vector<std::tuple<std::string, element_info, SoundSource>> elements;
 
 public:
   void load_sound(std::string name, std::string path);

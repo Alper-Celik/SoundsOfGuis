@@ -1,5 +1,5 @@
-#include "../_ErrorHelper.hpp"
-#include "../_SoundSource.hpp"
+#include "../impl_include/_ErrorHelper.hpp" /// use relative includes only for testing private modules
+#include "../impl_include/_SoundSource.hpp"
 #include "SoundCode.hpp"
 
 #include <alc.h>
