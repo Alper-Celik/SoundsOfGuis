@@ -1,7 +1,7 @@
-#include "_SoundSource.hpp"
+#include "impl/_SoundSource.hpp"
 
 #include "ExceptionUtils.hpp"
-#include "_ErrorHelper.hpp"
+#include "impl/_ErrorHelper.hpp"
 
 #include <al.h>
 #include <fmt/core.h>

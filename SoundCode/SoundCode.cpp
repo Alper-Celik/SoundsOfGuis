@@ -1,5 +1,7 @@
 #include "SoundCode.hpp"
-#include "_ErrorHelper.hpp"
+#include "impl/_ErrorHelper.hpp"
+
+#include "static_initilizer.hpp"
 
 #include <al.h>
 #include <alc.h>
@@ -11,18 +13,23 @@
 #include <stdexcept>
 
 namespace sog {
-void init_sound_system() {
-  if (alcGetCurrentContext() == nullptr) {
-    auto device = alcOpenDevice(nullptr);
-    auto context = alcCreateContext(device, nullptr);
-    al_check_error();
-    alcMakeContextCurrent(context);
-    al_check_error();
-  }
-}
+static_init init_sound_systems{[]() {
+  auto device = alcOpenDevice(nullptr);
+  auto context = alcCreateContext(device, nullptr);
+  alcMakeContextCurrent(context);
+  al_check_error();
+}};
+
 void SoundManager::load_sound(std::string name, std::string file) {
 
+  auto error_check_sf = [](SndfileHandle &handle) {
+    if (auto err = handle.error(); err != SF_ERR_NO_ERROR) {
+      throw_with_trace(std::runtime_error(sf_error_number(err)));
+    }
+  };
+
   SndfileHandle sndfile{file};
+  error_check_sf(sndfile);
 
   int format = AL_NONE;
   if (sndfile.channels() == 1) {
@@ -35,6 +42,7 @@ void SoundManager::load_sound(std::string name, std::string file) {
       static_cast<size_t>(sndfile.channels() * sndfile.frames()));
 
   sf_count_t frameCount = sndfile.readf(soundData.get(), sndfile.frames());
+  error_check_sf(sndfile);
 
   ALuint buffer = 0;
 
@@ -45,6 +53,7 @@ void SoundManager::load_sound(std::string name, std::string file) {
       sizeof(short));
 
   alBufferData(buffer, format, soundData.get(), dataSize, sndfile.samplerate());
+  al_check_error();
 
   sounds[name] = buffer;
 }

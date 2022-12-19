@@ -1,6 +1,6 @@
 #pragma once
 
-#include "_SoundSource.hpp"
+#include "impl/_SoundSource.hpp"
 
 #include <string>
 #include <tuple>
@@ -8,14 +8,13 @@
 #include <vector>
 
 namespace sog {
-void init_sound_system();
 
 struct element_info {
   int temp = 0;
 };
 
 class SoundManager {
-
+private:
   std::unordered_map<std::string, unsigned int> sounds;
   std::vector<std::tuple<std::string, element_info, SoundSource>> elements;
 

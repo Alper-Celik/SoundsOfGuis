@@ -1,13 +1,13 @@
-#include "../impl_include/_ErrorHelper.hpp" /// use relative includes only for testing private modules
-#include "../impl_include/_SoundSource.hpp"
 #include "SoundCode.hpp"
+#include "impl/_ErrorHelper.hpp"
+#include "impl/_SoundSource.hpp"
 
 #include <alc.h>
 #include <catch2/catch_test_macros.hpp>
+#include <sndfile.h>
 
 TEST_CASE("invariant of SoundSource", "[internal][SoundCode]") {
   using namespace sog;
-  sog::init_sound_system();
 
   SECTION("empty constractor") { SoundSource source; };
   SECTION("constract from buffer") {
