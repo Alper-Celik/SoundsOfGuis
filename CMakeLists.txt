@@ -11,6 +11,10 @@ find_package(OpenAL CONFIG REQUIRED)
 find_package(SndFile CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  find_package(Atspi-2 CONFIG REQUIRED)
+endif()
+
 if(enable_tests)
   include(CTest)
 
@@ -22,3 +26,4 @@ endif()
 
 add_subdirectory(Utils)
 add_subdirectory(SoundCode)
+add_subdirectory(GuiCollector)

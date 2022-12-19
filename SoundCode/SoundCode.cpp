@@ -13,7 +13,8 @@
 #include <stdexcept>
 
 namespace sog {
-static_init init_sound_systems{[]() {
+
+static_init init_sound_systems{[]() { /// TODO: dont use global initilazition
   auto device = alcOpenDevice(nullptr);
   auto context = alcCreateContext(device, nullptr);
   alcMakeContextCurrent(context);
