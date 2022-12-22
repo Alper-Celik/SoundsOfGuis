@@ -28,6 +28,7 @@
             openal
             catch2_3
             boost180
+            microsoft_gsl
             libbacktrace
 
             fmt_9
