@@ -18,13 +18,15 @@
 #include <stdexcept>
 
 namespace sog {
+SoundManager::SoundManager() {
+  if (alcGetCurrentContext() == nullptr) {
 
-static_init init_sound_systems{[]() { /// TODO: dont use global initilazition
-  auto device = alcOpenDevice(nullptr);
-  auto context = alcCreateContext(device, nullptr);
-  alcMakeContextCurrent(context);
-  al_check_error();
-}};
+    auto device = alcOpenDevice(nullptr);
+    auto context = alcCreateContext(device, nullptr);
+    alcMakeContextCurrent(context);
+    al_check_error();
+  }
+}
 
 unsigned int load_sound(std::string sound_file_path) {
   auto error_check_sf = [](SndfileHandle &handle) {

@@ -49,11 +49,12 @@
               version = "0.0.0";
               src = ./.;
               nativeBuildInputs = BuildTools;
-              BuildInputs = RuntimeDeps;
+              buildInputs = RuntimeDeps;
 
 
               libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
             };
+          #TODO: checks
 
         });
 }
