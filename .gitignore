@@ -2,3 +2,6 @@ build
 Testing
 
 .direnv
+
+#TODO: create proper configrations
+.vscode 
