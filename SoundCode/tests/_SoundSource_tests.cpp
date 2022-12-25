@@ -12,6 +12,7 @@ std::filesystem::path metarial_dir{TEST_METARIAL_DIR};
 }
 TEST_CASE("invariant of SoundSource", "[internal][SoundCode]") {
   using namespace sog;
+  SoundManager s; // initilize al context
 
   SECTION("empty constractor") { SoundSource source; };
   SECTION("constract from buffer") {
@@ -44,6 +45,8 @@ TEST_CASE("invariant of SoundSource", "[internal][SoundCode]") {
 constexpr auto min_sound_duration = std::chrono::milliseconds{500};
 TEST_CASE("play stop test", "[internal][SoundCode]") {
   using namespace sog;
+  SoundManager s; // initilize al context
+
   auto sound_file_path = metarial_dir / "mono_sound.wav";
   SoundSource s1{load_sound(sound_file_path.string())};
   SECTION("sound should not be playing after sound ended") {
@@ -67,6 +70,8 @@ TEST_CASE("play stop test", "[internal][SoundCode]") {
 TEST_CASE("loop test", "[internal][SoundCode]") {
 
   using namespace sog;
+  SoundManager s; // initilize al context
+
   auto sound_file_path = metarial_dir / "mono_sound.wav";
   SoundSource s1{load_sound(sound_file_path.string())};
 
@@ -87,6 +92,8 @@ TEST_CASE("loop test", "[internal][SoundCode]") {
 
 TEST_CASE("position test", "[internal][SoundCode]") {
   using namespace sog;
+  SoundManager s; // initilize al context
+
   SoundSource s1;
   CHECK(s1.get_position() == point3{0, 0, 0});
   s1.set_position({1, 2, 3});

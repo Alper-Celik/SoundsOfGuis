@@ -11,19 +11,15 @@
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-        in
-        rec {
-          BuildTools = with pkgs; [
+          nativeBuildInputs = with pkgs; [
             cmake
             ninja
             pkg-config
           ];
-          RuntimeDeps = with pkgs; [
+          buildInputs = with pkgs; [
             nlohmann_json
 
             libsndfile
-            flac
-            libogg
 
             openal
             catch2_3
@@ -35,26 +31,29 @@
             spdlog
             at-spi2-core
           ];
-
-          devShell = pkgs.mkShell {
-            buildInputs = RuntimeDeps;
-            nativeBuildInputs = BuildTools;
-
-            libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
-          };
-          packages.default = pkgs.stdenv.mkDerivation
-            rec
+          baseDerivation =
             {
               pname = "SoundsOfGuis";
               version = "0.0.0";
               src = ./.;
-              nativeBuildInputs = BuildTools;
-              buildInputs = RuntimeDeps;
-
+              inherit buildInputs nativeBuildInputs;
 
               libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
             };
-          #TODO: checks
 
+        in
+        {
+
+          devShell = pkgs.mkShell baseDerivation;
+          packages.default = pkgs.stdenv.mkDerivation (baseDerivation // { });
+
+          checks.tests = pkgs.stdenv.mkDerivation (baseDerivation // {
+            # installPhase = ''
+            #   ctest --output-on-failure
+            # '';
+            shellHook = ''
+              echo "Hello shell!"
+            '';
+          });
         });
 }

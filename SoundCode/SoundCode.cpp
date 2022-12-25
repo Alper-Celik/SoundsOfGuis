@@ -20,11 +20,10 @@
 namespace sog {
 SoundManager::SoundManager() {
   if (alcGetCurrentContext() == nullptr) {
-
     auto device = alcOpenDevice(nullptr);
     auto context = alcCreateContext(device, nullptr);
     alcMakeContextCurrent(context);
-    al_check_error();
+    sog::al_check_error();
   }
 }
 

@@ -17,7 +17,7 @@ struct element_info {
 };
 unsigned int load_sound(std::string path);
 class SoundManager {
-private:
+public:
   SoundManager() noexcept(false);
   ~SoundManager() = default;
 
@@ -26,6 +26,7 @@ private:
   SoundManager(SoundManager &&) = default;
   SoundManager &operator=(SoundManager &&) = default;
 
+private:
   std::unordered_map<std::string,
                      std::pair<std::optional<unsigned int>, element_info>>
       sounds;

@@ -2,10 +2,26 @@ name: "Test"
 on:
   pull_request:
   push:
+env:
+  BUILD_TYPE: Release
+  ALSOFT_DRIVERS: "null" # no op alsoft backend
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18
-    - run: nix flake check
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - uses: HatsuneMiku3939/direnv-action@v1
+
+    - name: configure
+      run : cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -GNinja
+
+    - name: build
+      run : cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
