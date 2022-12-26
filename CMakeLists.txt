@@ -10,6 +10,7 @@ list(PREPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(SndFile CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
+find_package(Boost CONFIG REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
