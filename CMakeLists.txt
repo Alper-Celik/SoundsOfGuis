@@ -13,6 +13,11 @@ find_package(fmt CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
 
+find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets Qml Core)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   find_package(Atspi-2 CONFIG REQUIRED)
 endif()

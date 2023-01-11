@@ -15,21 +15,26 @@
             cmake
             ninja
             pkg-config
+            libsForQt5.qt5.wrapQtAppsHook
           ];
           buildInputs = with pkgs; [
             nlohmann_json
 
             libsndfile
-
             openal
+
             catch2_3
+
             boost180
-            microsoft_gsl
             libbacktrace
+            microsoft_gsl
 
             fmt_9
             spdlog
+
             at-spi2-core
+
+            libsForQt5.qt5.qtbase
           ];
           baseDerivation =
             {
