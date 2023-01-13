@@ -1,3 +1,4 @@
+#include "point2.hpp"
 
 #include <QApplication>
 #include <Qt>
@@ -29,28 +30,42 @@ TEST_CASE() {
   std::mutex gui_init_lock;
   gui_wrapper s(R"(
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 
 Window {
     id: root
     visible: true
     visibility:Window.FullScreen
-
+t
     Rectangle
     {
         width: parent.width;
         height: parent.height / 2;
         color: "red"
-        anchors.centerIn: parent
+        anchors.top: parent
 
         Accessible.role: Accessible.List
+        Text
+        {
+          text: "List"
+          anchors.centerIn: parent
+        }
+        
         Rectangle
         {
             width: parent.width;
-            height: parent.height / 2;
+            height: parent.height / 2 ;
             color: "blue"
-            anchors.centerIn: parent
+            anchors.top: parent
             Accessible.role: Accessible.ListItem
+            opacity: 1 / 3;
+
+            Text
+            {
+              text: "ListItem"
+              anchors.centerIn: parent
+            }
         }
 
     }
@@ -61,7 +76,12 @@ Window {
   QScreen *screen =
       QApplication::primaryScreen(); // TODO: am i leaking memory ?
 
-  screen->geometry().bottom();
+  auto center = screen->geometry().center().x();
+
+  sog::point2<int> window_pos{.x = center,
+                              .y = screen->geometry().bottom() - 20};
+  sog::point2<int> list_pos{window_pos / sog::point2<int>{1, 2}};
+  sog::point2<int> list_item_pos{list_pos / sog::point2<int>{1, 2}};
 
   gui_init_lock.lock();
 }
