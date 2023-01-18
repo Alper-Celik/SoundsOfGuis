@@ -1,3 +1,4 @@
+#include "GuiCollector.hpp"
 #include "point2.hpp"
 
 #include <QApplication>
@@ -82,6 +83,8 @@ t
                               .y = screen->geometry().bottom() - 20};
   sog::point2<int> list_pos{window_pos / sog::point2<int>{1, 2}};
   sog::point2<int> list_item_pos{list_pos / sog::point2<int>{1, 2}};
+
+  // sog::PlatformGuiCollector driver;
 
   gui_init_lock.lock();
 }

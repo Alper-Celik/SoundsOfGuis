@@ -1,4 +1,6 @@
 
+#include "GuiCollector.hpp"
+
 #include "ExceptionUtils.hpp"
 
 #define CHECK_EROR(x, y)                                                       \
