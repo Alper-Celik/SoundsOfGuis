@@ -84,7 +84,30 @@ t
   sog::point2<int> list_pos{window_pos / sog::point2<int>{1, 2}};
   sog::point2<int> list_item_pos{list_pos / sog::point2<int>{1, 2}};
 
-  // sog::PlatformGuiCollector driver;
+  // getting positions is hacky better solutioun can be used
+  // for example getting location data from gui using id's of elements
 
-  gui_init_lock.lock();
+  sog::GuiCollector collector;
+
+  SECTION("element comparission") {
+    // TODO: test comaprrission for another gui element with same type
+    // also check with same depth at gui tree
+    sog::GuiElement list_item = collector.get_control_at_pos(list_item_pos);
+    CHECK(list_item == collector.get_control_at_pos(list_item_pos));
+  }
+
+  SECTION("parent element") {
+    sog::GuiElement list_item = collector.get_control_at_pos(list_item_pos);
+    sog::GuiElement list = collector.get_control_at_pos(list_pos);
+    CHECK(list == (*list_item.get_parent()));
+  }
+
+  SECTION("element type checks") {
+
+    sog::GuiElement list_item = collector.get_control_at_pos(list_item_pos);
+    CHECK(list_item.get_type() == sog::element_type::list_item);
+    CHECK(list_item.get_parent()->get_type() == sog::element_type::list);
+    CHECK(list_item.get_parent()->get_parent()->get_type() ==
+          sog::element_type::window);
+  }
 }
