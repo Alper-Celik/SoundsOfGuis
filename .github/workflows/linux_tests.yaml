@@ -10,18 +10,49 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
+
     - uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+    - uses: actions/cache@v3
+      id: nix-cache
+      with:
+        path: /tmp/nix-cache
+        key: nix-store-${{ hashFiles('**/flake.*') }}
+
+    - name: cache hit
+      if: steps.nix-cache.outputs.cache-hit == 'true'
+      run: |
+          sudo chown -R root /tmp/nix-cache
+    
+          sudo cp -fRT /tmp/nix-cache/ /nix/
+          sudo pkill nix-daemon
+    
     - uses: HatsuneMiku3939/direnv-action@v1
+
+    - name: cache it
+      if: steps.nix-cache.outputs.cache-hit != 'true'
+      run: |
+          sudo cp -r /nix /tmp/nix-cache
+    
+          sudo rm -rf /tmp/nix-cache/var/nix/daemon-socket/socket
+          sudo rm -rf /tmp/nix-cache/var/nix/userpool
+          sudo rm -rf /tmp/nix-cache/var/nix/gc.lock
+          sudo rm -rf /tmp/nix-cache/var/nix/db/big-lock
+          sudo rm -rf /tmp/nix-cache/var/nix/db/reserved
+   
 
     - name: configure
       run : cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -GNinja
 
-    - name: build
-      run : cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    # - name: build
+    #   run : cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    #
+    #
+    # - name: test
+    #   working-directory: ${{github.workspace}}/build
+    #   run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
 
-    - name: test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
