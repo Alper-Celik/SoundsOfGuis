@@ -1,10 +1,14 @@
 #pragma once
 #include "point2.hpp"
+#include <atomic>
 #include <optional>
+
+#include "atspi/atspi.h"
 namespace sog {
 enum class element_type { window, list, list_item };
 
 class GuiElement {
+
 public:
   ~GuiElement();
   GuiElement();
@@ -15,6 +19,9 @@ public:
 };
 
 class GuiCollector {
+  AtspiAccessible *desktop = nullptr;
+  std::atomic<sog::point2<int>> point;
+
 public:
   ~GuiCollector();
   GuiCollector();
