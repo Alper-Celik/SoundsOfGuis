@@ -21,6 +21,8 @@ set(CMAKE_AUTOUIC ON)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   find_package(Atspi-2 CONFIG REQUIRED)
   find_package(Gobject-2 CONFIG REQUIRED)
+
+  find_package(libxdo CONFIG REQUIRED)
 endif()
 
 if(enable_tests)

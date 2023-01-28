@@ -33,6 +33,7 @@
             spdlog
 
             at-spi2-core
+            xdotool
 
             libsForQt5.qt5.qtbase
           ];

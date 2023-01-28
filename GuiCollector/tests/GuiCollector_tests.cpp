@@ -11,7 +11,8 @@
 
 TEST_CASE("mouse pos tests") {
   sog::GuiCollector collector;
-  collector.set_mouse_pos({0, 0});
+  collector.set_mouse_pos({10, 10});
+  CHECK(collector.get_mouse_pos() == sog::point2<int>{10, 10});
 };
 
 struct gui_wrapper {
