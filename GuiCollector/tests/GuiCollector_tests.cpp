@@ -33,87 +33,91 @@ struct gui_wrapper {
         }) {}
   ~gui_wrapper() { app_ptr->quit(); }
 };
-// TEST_CASE() {
-//   std::mutex gui_init_lock;
-//   gui_wrapper s(R"(
-// import QtQuick 2.15
-// import QtQuick.Controls 2.15
-// import QtQuick.Window 2.15
-//
-// Window {
-//     id: root
-//     visible: true
-//     visibility:Window.FullScreen
-// t
-//     Rectangle
-//     {
-//         width: parent.width;
-//         height: parent.height / 2;
-//         color: "red"
-//         anchors.top: parent
-//
-//         Accessible.role: Accessible.List
-//         Text
-//         {
-//           text: "List"
-//           anchors.centerIn: parent
-//         }
-//
-//         Rectangle
-//         {
-//             width: parent.width;
-//             height: parent.height / 2 ;
-//             color: "blue"
-//             anchors.top: parent
-//             Accessible.role: Accessible.ListItem
-//             opacity: 1 / 3;
-//
-//             Text
-//             {
-//               text: "ListItem"
-//               anchors.centerIn: parent
-//             }
-//         }
-//
-//     }
-// }
-//   )",
-//                 gui_init_lock);
-//   std::unique_lock<std::mutex> test_lock{gui_init_lock};
-//   QScreen *screen =
-//       QApplication::primaryScreen(); // TODO: am i leaking memory ?
-//
-//   auto center = screen->geometry().center().x();
-//
-//   sog::point2<int> window_pos{.x = center,
-//                               .y = screen->geometry().bottom() - 20};
-//   sog::point2<int> list_pos{window_pos / sog::point2<int>{1, 2}};
-//   sog::point2<int> list_item_pos{list_pos / sog::point2<int>{1, 2}};
-//
-//   // getting positions is hacky better solutioun can be used
-//   // for example getting location data from gui using id's of elements
-//
-//   sog::GuiCollector collector;
-//
-//   SECTION("element comparission") {
-//     // TODO: test comaprrission for another gui element with same type
-//     // also check with same depth at gui tree
-//     sog::GuiElement list_item = collector.get_control_at_pos(list_item_pos);
-//     CHECK(list_item == collector.get_control_at_pos(list_item_pos));
-//   }
-//
-//   SECTION("parent element") {
-//     sog::GuiElement list_item = collector.get_control_at_pos(list_item_pos);
-//     sog::GuiElement list = collector.get_control_at_pos(list_pos);
-//     CHECK(list == (*list_item.get_parent()));
-//   }
-//
-//   SECTION("element type checks") {
-//
-//     sog::GuiElement list_item = collector.get_control_at_pos(list_item_pos);
-//     CHECK(list_item.get_type() == sog::element_type::list_item);
-//     CHECK(list_item.get_parent()->get_type() == sog::element_type::list);
-//     CHECK(list_item.get_parent()->get_parent()->get_type() ==
-//           sog::element_type::window);
-//   }
-// }
+TEST_CASE() {
+  std::mutex gui_init_lock;
+  gui_wrapper s(R"(
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Window 2.15
+
+Window {
+    id: root
+    visible: true
+    visibility:Window.FullScreen
+
+    Rectangle
+    {
+        width: parent.width;
+        height: parent.height / 2;
+        color: "red"
+        anchors.top: parent
+
+        Accessible.role: Accessible.List
+        Text
+        {
+          text: "List"
+          anchors.centerIn: parent
+        }
+
+        Rectangle
+        {
+            width: parent.width;
+            height: parent.height / 2 ;
+            color: "blue"
+            anchors.top: parent
+            Accessible.role: Accessible.ListItem
+            opacity: 1 / 3;
+
+            Text
+            {
+              text: "ListItem"
+              anchors.centerIn: parent
+            }
+        }
+
+    }
+}                         )",
+                gui_init_lock);
+  std::this_thread::sleep_for(
+      std::chrono::milliseconds{500}); // let the  gui initilize
+  std::unique_lock<std::mutex> test_lock{gui_init_lock};
+  QScreen *screen =
+      QApplication::primaryScreen(); // TODO: am i leaking memory ?
+
+  auto center = screen->geometry().center().x();
+
+  sog::point2<int> window_pos{.x = center,
+                              .y = screen->geometry().bottom() - 20};
+  sog::point2<int> list_pos{window_pos / sog::point2<int>{1, 2}};
+  sog::point2<int> list_item_pos{list_pos / sog::point2<int>{1, 2}};
+
+  // getting positions is hacky better solutioun can be used
+  // for example getting location data from gui using id's of elements
+
+  sog::GuiCollector collector;
+
+  SECTION("element comparission") {
+    // TODO: test comaprrission for another gui element with same type
+    // also check with same depth at gui tree
+    auto list_item = collector.get_control_at_pos(list_item_pos);
+    REQUIRE(list_item.has_value());
+
+    CHECK((list_item.value() ==
+           collector.get_control_at_pos(list_item_pos).value()));
+  }
+  //
+  // SECTION("parent element") {
+  //   auto list_item = collector.get_control_at_pos(list_item_pos);
+  //   auto list = collector.get_control_at_pos(list_pos);
+  //   CHECK((list.value() == list_item->get_parent().value()));
+  // }
+  //
+  // SECTION("element type checks") {
+  //
+  //   auto list_item = collector.get_control_at_pos(list_item_pos);
+  //   CHECK(list_item->get_type() == sog::element_type::list_item);
+  //   CHECK(list_item->get_parent()->get_type() == sog::element_type::list);
+  //   CHECK(list_item->get_parent()->get_parent()->get_type() ==
+  //         sog::element_type::window);
+  // }
+}
