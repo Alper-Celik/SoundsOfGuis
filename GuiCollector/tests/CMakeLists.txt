@@ -11,6 +11,7 @@ macro(add_hacky_test file_name)
   catch_discover_tests(hacky_test_${file_name})
 
 endmacro()
+add_hacky_test(element_comparission_test)
 
 add_hacky_test(GuiCollector_tests)
 add_hacky_test(testing)

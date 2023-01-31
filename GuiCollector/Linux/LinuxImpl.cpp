@@ -13,7 +13,7 @@ namespace sog
 {
 
 GuiElement::GuiElement(AtspiAccessible *native_element)
-    : native_element(native_element){};
+    : native_element(native_element){}; // TODO: enable accessiblity from dbus
 GuiElement::GuiElement(GuiElement &&other)
     : native_element(other.native_element)
 {
@@ -58,7 +58,9 @@ gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle()
     return native_element;
 }
 
-bool GuiElement::operator==(const GuiElement &other)
+bool GuiElement::operator==(
+    const GuiElement &other) // FIXME: id's might not be unique
+                             //  and some toolkits might not expose it
 {
     gsl::not_null<gchar *> id_1_ptr =
         atspi_accessible_get_accessible_id(native_element, nullptr);
@@ -123,12 +125,14 @@ std::optional<GuiElement> GuiCollector::get_control_at_pos(point2<int> pos)
         {
             GuiElement window = atspi_accessible_get_child_at_index(
                 application.get_handle(), window_index, nullptr);
+
             auto window_component = atspi_accessible_get_component_iface(
                 window.get_handle()); // NOTE: Do I need to free it ?
 
             AtspiAccessible *element = atspi_component_get_accessible_at_point(
                 window_component, pos.x, pos.y, ATSPI_COORD_TYPE_SCREEN,
                 nullptr);
+
             if (element != nullptr)
             {
                 return element;
