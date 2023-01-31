@@ -46,6 +46,10 @@ element_type GuiElement::get_type() {
   return element_type::undefined;
 }
 
+gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle() {
+  return native_element;
+}
+
 bool GuiElement::operator==(const GuiElement &other) {
   gsl::not_null<gchar *> id_1_ptr =
       atspi_accessible_get_accessible_id(native_element, nullptr);
@@ -87,13 +91,32 @@ point2<int> GuiCollector::get_mouse_pos() {
   return {x, y};
 }
 std::optional<GuiElement> GuiCollector::get_control_at_pos(point2<int> pos) {
-  AtspiAccessible *elememt = atspi_component_get_accessible_at_point(
-      atspi_accessible_get_component(
-          desktop) /* TODO:porobaly not implementing compenent interface*/,
-      pos.x, pos.y, ATSPI_COORD_TYPE_SCREEN, nullptr);
-  if (elememt == nullptr)
-    return std::nullopt;
-  else
-    return {elememt};
+  int application_count = atspi_accessible_get_child_count(desktop, nullptr);
+
+  for (int application_index = 0; application_index < application_count;
+       application_index++) {
+    GuiElement application = atspi_accessible_get_child_at_index(
+        desktop, application_index, nullptr);
+
+    int window_count =
+        atspi_accessible_get_child_count(application.get_handle(), nullptr);
+    for (int window_index = 0; window_index < window_count; window_index++) {
+      GuiElement window = atspi_accessible_get_child_at_index(
+          application.get_handle(), window_index, nullptr);
+      auto window_component = atspi_accessible_get_component_iface(
+          window.get_handle()); // NOTE: Do I need to free it ?
+
+      AtspiAccessible *element = atspi_component_get_accessible_at_point(
+          window_component, pos.x, pos.y, ATSPI_COORD_TYPE_SCREEN, nullptr);
+      if (element != nullptr) {
+        return element;
+      } else if (atspi_component_contains(window_component, pos.x, pos.y,
+                                          ATSPI_COORD_TYPE_SCREEN, nullptr)) {
+        return std::move(window);
+      }
+    }
+  }
+
+  return std::nullopt;
 }
 } // namespace sog

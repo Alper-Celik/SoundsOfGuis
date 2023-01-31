@@ -18,7 +18,11 @@ enum class element_type {
 };
 
 class GuiElement {
-  gsl::not_null<AtspiAccessible *> native_element;
+public:
+  using native_hadle_t = AtspiAccessible *;
+
+private:
+  gsl::not_null<native_hadle_t> native_element;
 
 public:
   GuiElement(AtspiAccessible *native_element);
@@ -32,6 +36,7 @@ public:
 
   std::optional<GuiElement> get_parent();
   element_type get_type();
+  gsl::not_null<native_hadle_t> get_handle();
   bool operator==(const GuiElement &other);
 };
 
