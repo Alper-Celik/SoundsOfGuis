@@ -9,36 +9,40 @@
 #include <unordered_map>
 #include <vector>
 
-namespace sog {
+namespace sog
+{
 
-struct element_info {
-  point3 distance_to_other = {0, 0, 0};
-  bool is_looping = false;
+struct element_info
+{
+    point3 distance_to_other = {0, 0, 0};
+    bool is_looping = false;
 };
 unsigned int load_sound(std::string path);
-class SoundManager {
-public:
-  SoundManager() noexcept(false);
-  ~SoundManager() = default;
+class SoundManager
+{
+  public:
+    SoundManager() noexcept(false);
+    ~SoundManager() = default;
 
-  SoundManager(const SoundManager &) = delete;
-  SoundManager &operator=(const SoundManager &) = delete;
-  SoundManager(SoundManager &&) = default;
-  SoundManager &operator=(SoundManager &&) = default;
+    SoundManager(const SoundManager &) = delete;
+    SoundManager &operator=(const SoundManager &) = delete;
+    SoundManager(SoundManager &&) = default;
+    SoundManager &operator=(SoundManager &&) = default;
 
-private:
-  std::unordered_map<std::string,
-                     std::pair<std::optional<unsigned int>, element_info>>
-      sounds;
-  std::vector<std::tuple<std::string, element_info, SoundSource>> elements;
+  private:
+    std::unordered_map<std::string,
+                       std::pair<std::optional<unsigned int>, element_info>>
+        sounds;
+    std::vector<std::tuple<std::string, element_info, SoundSource>> elements;
 
-public:
-  void load_element(std::string name, element_info element_info,
-                    std::optional<std::string> sound_file_path = std::nullopt);
+  public:
+    void load_element(
+        std::string name, element_info element_info,
+        std::optional<std::string> sound_file_path = std::nullopt);
 
-  void add_element(std::string name);
-  void remove_last();
+    void add_element(std::string name);
+    void remove_last();
 
-  void refresh_sounds();
+    void refresh_sounds();
 };
 } // namespace sog
