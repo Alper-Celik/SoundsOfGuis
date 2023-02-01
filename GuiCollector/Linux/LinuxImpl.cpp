@@ -126,8 +126,10 @@ std::optional<GuiElement> GuiCollector::get_control_at_pos(point2<int> pos)
             GuiElement window = atspi_accessible_get_child_at_index(
                 application.get_handle(), window_index, nullptr);
 
-            auto window_component = atspi_accessible_get_component_iface(
-                window.get_handle()); // NOTE: Do I need to free it ?
+            auto window_component =
+                atspi_accessible_get_component_iface(window.get_handle());
+            auto free_window_component =
+                gsl::finally([&] { g_object_unref(window_component); });
 
             AtspiAccessible *element = atspi_component_get_accessible_at_point(
                 window_component, pos.x, pos.y, ATSPI_COORD_TYPE_SCREEN,
