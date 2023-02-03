@@ -45,6 +45,8 @@
               inherit buildInputs nativeBuildInputs;
 
               libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
+              QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
+              QT_ACCESSIBILITY = 1;
             };
 
         in
