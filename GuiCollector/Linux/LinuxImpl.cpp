@@ -1,5 +1,6 @@
 #include "GuiCollector.hpp"
 
+#include "AtspiMappings.hpp"
 #include "ExceptionUtils.hpp"
 
 #include <atspi/atspi.h>
@@ -47,10 +48,15 @@ std::optional<GuiElement> GuiElement::get_parent()
         return element;
 }
 
-element_type GuiElement::get_type()
+element_type GuiElement::get_type() // TODO: be smarter than map lookup
+                                    // like first frame is window but others are
+                                    // freme etc and take toolkit into account
+                                    // if needed
 {
-    // TODO:
-    return element_type::undefined;
+    AtspiRole type = atspi_accessible_get_role(native_element, nullptr);
+    fmt::print("{}\n", atspi_accessible_get_role_name(native_element, nullptr));
+
+    return sog::AtspiMapping.at(type);
 }
 
 gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle()
@@ -61,6 +67,7 @@ gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle()
 bool GuiElement::operator==(
     const GuiElement &other) // FIXME: id's might not be unique
                              //  and some toolkits might not expose it
+                             //  NOTE: looks like only QT exposes id
 {
     gsl::not_null<gchar *> id_1_ptr =
         atspi_accessible_get_accessible_id(native_element, nullptr);
