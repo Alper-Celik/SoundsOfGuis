@@ -4,13 +4,28 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/22.11";
     flake-utils.url = "github:numtide/flake-utils";
+
+    # c++ libs
+    magic-enum-repo = {
+      url = "github:Neargye/magic_enum/v0.8.2";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, magic-enum-repo, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          magic-enum = pkgs.stdenv.mkDerivation
+            {
+              pname = "magic-enum";
+              version = "0.8.2";
+              src = magic-enum-repo;
+              doCheck = true;
+              nativeBuildInputs = with pkgs; [ cmake ];
+            };
+
           nativeBuildInputs = with pkgs; [
             cmake
             ninja
@@ -19,6 +34,7 @@
           ];
           buildInputs = with pkgs; [
             nlohmann_json
+            magic-enum
 
             libsndfile
             openal
@@ -41,7 +57,7 @@
             {
               pname = "SoundsOfGuis";
               version = "0.0.0";
-              src = ./.;
+              src = self;
               inherit buildInputs nativeBuildInputs;
 
               libbacktrace_header = "${pkgs.libbacktrace}/include/backtrace.h";
@@ -55,13 +71,6 @@
           devShell = pkgs.mkShell baseDerivation;
           packages.default = pkgs.stdenv.mkDerivation (baseDerivation // { });
 
-          checks.tests = pkgs.stdenv.mkDerivation (baseDerivation // {
-            # installPhase = ''
-            #   ctest --output-on-failure
-            # '';
-            shellHook = ''
-              echo "Hello shell!"
-            '';
-          });
+
         });
 }

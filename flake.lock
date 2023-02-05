@@ -15,6 +15,23 @@
         "type": "github"
       }
     },
+    "magic-enum-repo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1670586744,
+        "narHash": "sha256-k4zCEQxO0N/o1hDYxw5p9u0BMwP/5oIoe/4yw7oqEo0=",
+        "owner": "Neargye",
+        "repo": "magic_enum",
+        "rev": "e1a68e9dd3d2e9180b04c8aeacd4975db745e6b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Neargye",
+        "ref": "v0.8.2",
+        "repo": "magic_enum",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1669833724,
@@ -34,6 +51,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "magic-enum-repo": "magic-enum-repo",
         "nixpkgs": "nixpkgs"
       }
     }

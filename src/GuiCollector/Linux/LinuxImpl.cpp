@@ -3,9 +3,12 @@
 #include "AtspiMappings.hpp"
 #include "ExceptionUtils.hpp"
 
+#define MAGIC_ENUM_RANGE_MIN 0
+#define MAGIC_ENUM_RANGE_MAX 256
 #include <atspi/atspi.h>
 #include <fmt/format.h>
 #include <gsl/gsl_util>
+#include <magic_enum.hpp>
 #include <xdo.h>
 
 /// TODO : add proper error handling of At-spi
@@ -54,7 +57,7 @@ element_type GuiElement::get_type() // TODO: be smarter than map lookup
                                     // if needed
 {
     AtspiRole type = atspi_accessible_get_role(native_element, nullptr);
-    fmt::print("{}\n", atspi_accessible_get_role_name(native_element, nullptr));
+    fmt::print("{}\n", magic_enum::enum_name<AtspiRole>(type));
 
     return sog::AtspiMapping.at(type);
 }
