@@ -2,7 +2,10 @@
 #include <boost/exception/all.hpp>
 #include <boost/stacktrace.hpp>
 #include <fmt/core.h>
+
 #include <sstream>
+
+// TODO: add error types for better error handling
 namespace sog
 {
 using traced =
