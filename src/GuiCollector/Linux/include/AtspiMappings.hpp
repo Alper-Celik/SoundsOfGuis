@@ -2,8 +2,7 @@
 #include "GuiCollector.hpp"
 #include <atspi/atspi.h>
 #include <unordered_map>
-namespace sog
-{
+namespace sog {
 
 inline std::unordered_map<AtspiRole, sog::element_type> AtspiMapping{
     {AtspiRole::ATSPI_ROLE_INVALID, sog::element_type::undefined},

@@ -8,38 +8,31 @@
 #include <qqmlapplicationengine.h>
 #include <qscreen.h>
 #include <thread>
-struct gui_wrapper
-{
-    std::unique_lock<std::mutex> lock;
-    std::jthread gui_thread;
-    QApplication *app_ptr;
+struct gui_wrapper {
+  std::unique_lock<std::mutex> lock;
+  std::jthread gui_thread;
+  QApplication *app_ptr;
 
-    gui_wrapper(const char *qml_code, std::mutex &mutex)
-        : lock(mutex), gui_thread([&] {
-              int temp = 0;
-              QApplication app(temp, nullptr);
-              app_ptr = &app;
-              QQmlApplicationEngine engine;
-              engine.loadData(qml_code);
-              QMetaObject::invokeMethod(
-                  app.thread(), [&] { lock.unlock(); }, Qt::QueuedConnection);
-              app.exec();
-          })
-    {
-    }
-    ~gui_wrapper()
-    {
-        app_ptr->quit();
-    }
+  gui_wrapper(const char *qml_code, std::mutex &mutex)
+      : lock(mutex), gui_thread([&] {
+          int temp = 0;
+          QApplication app(temp, nullptr);
+          app_ptr = &app;
+          QQmlApplicationEngine engine;
+          engine.loadData(qml_code);
+          QMetaObject::invokeMethod(
+              app.thread(), [&] { lock.unlock(); }, Qt::QueuedConnection);
+          app.exec();
+        }) {}
+  ~gui_wrapper() { app_ptr->quit(); }
 };
-struct Gui_test_fixture
-{
-    sog::GuiCollector collector;
-    std::mutex gui_init_lock;
-    gui_wrapper s;
-    sog::point2<int> window_pos, list_pos, list_item_pos;
-    Gui_test_fixture()
-        : s(R"(
+struct Gui_test_fixture {
+  sog::GuiCollector collector;
+  std::mutex gui_init_lock;
+  gui_wrapper s;
+  sog::point2<int> window_pos, list_pos, list_item_pos;
+  Gui_test_fixture()
+      : s(R"(
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
@@ -81,24 +74,23 @@ Window {
 
     }
 }                         )",
-            gui_init_lock)
-    {
-        std::this_thread::sleep_for(
-            std::chrono::milliseconds{500}); // let the  gui initilize
-        std::unique_lock<std::mutex> test_lock{gui_init_lock};
-        QScreen *screen =
-            QApplication::primaryScreen(); // TODO: am i leaking memory ?
+          gui_init_lock) {
+    std::this_thread::sleep_for(
+        std::chrono::milliseconds{500}); // let the  gui initilize
+    std::unique_lock<std::mutex> test_lock{gui_init_lock};
+    QScreen *screen =
+        QApplication::primaryScreen(); // TODO: am i leaking memory ?
 
-        auto center = screen->geometry().center().x();
+    auto center = screen->geometry().center().x();
 
-        window_pos = sog::point2<int>{.x = center,
-                                      .y = screen->geometry().bottom() - 20};
-        list_pos = sog::point2<int>{window_pos / sog::point2<int>{1, 2}};
-        list_item_pos = sog::point2<int>{list_pos / sog::point2<int>{1, 2}};
+    window_pos =
+        sog::point2<int>{.x = center, .y = screen->geometry().bottom() - 20};
+    list_pos = sog::point2<int>{window_pos / sog::point2<int>{1, 2}};
+    list_item_pos = sog::point2<int>{list_pos / sog::point2<int>{1, 2}};
 
-        // getting positions is hacky better solutioun can be used
-        // for example getting location data from gui using id's of elements
+    // getting positions is hacky better solutioun can be used
+    // for example getting location data from gui using id's of elements
 
-        sog::GuiCollector collector;
-    }
+    sog::GuiCollector collector;
+  }
 };
