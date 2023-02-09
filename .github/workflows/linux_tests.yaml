@@ -11,26 +11,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
-
-    - run: |
-        sudo mkdir -p /nix
-        sudo chmod -R 777 /nix
-    - uses: actions/cache/restore@v3
-      id: nix-cache
-      with:
-        path: |
-          # See https://github.com/actions/cache/pull/726
-          /nix/store/**
-          /nix/var/nix/*/*
-          /nix/var/nix/db/*
-          /nix/var/nix/db/*/**
-          !/nix/var/nix/daemon-socket/socket
-          !/nix/var/nix/userpool/*
-          !/nix/var/nix/gc.lock
-          !/nix/var/nix/db/big-lock
-          !/nix/var/nix/db/reserved
-        key: nix-store-${{ hashFiles('**/flake.*') }}
-      
     - uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
@@ -48,22 +28,4 @@ jobs:
     # - name: test
     #   working-directory: ${{github.workspace}}/build
     #   run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
-
-    - name: save cahce
-      if: steps.nix-cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v3
-      with: # github doesn't support anchors why? 
-        # FIXME: DRY this duplicate defination
-        path: |
-          # See https://github.com/actions/cache/pull/726
-          /nix/store/**
-          /nix/var/nix/*/*
-          /nix/var/nix/db/*
-          /nix/var/nix/db/*/**
-          !/nix/var/nix/daemon-socket/socket
-          !/nix/var/nix/userpool/*
-          !/nix/var/nix/gc.lock
-          !/nix/var/nix/db/big-lock
-          !/nix/var/nix/db/reserved
-        key: nix-store-${{ hashFiles('**/flake.*') }}
 
