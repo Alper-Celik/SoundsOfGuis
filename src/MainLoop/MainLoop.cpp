@@ -30,7 +30,7 @@ void MainLoop::update_gui_tree()
             goto subtree;
         }
     }
-    removed_element_count = old_element_tree.size();
+    removed_element_count = old_element_tree.size(); // all elements removed
 subtree:
     added_elements = new_added_elements;
     for (int i = 0; i < removed_element_count; i++)
@@ -40,5 +40,9 @@ subtree:
     old_element_tree.insert(end(old_element_tree), begin(added_elements),
                             std::end(added_elements));
 };
+
+void MainLoop::update_sounds()
+{
+}
 
 } // namespace sog

@@ -1,4 +1,5 @@
 #pragma once
+#include "element_type.hpp"
 #include "point2.hpp"
 
 #include <atspi/atspi.h>
@@ -11,14 +12,6 @@
 
 namespace sog
 {
-enum class element_type
-{
-    undefined,
-    window,
-    list,
-    list_item,
-};
-
 class GuiElement
 {
   public:
