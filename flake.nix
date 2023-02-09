@@ -2,29 +2,16 @@
   description = "experimental accessiblity project (deneysel erişilebilirlik projesi)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
 
-    # c++ libs
-    magic-enum-repo = {
-      url = "github:Neargye/magic_enum/v0.8.2";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, magic-enum-repo, ... }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          magic-enum = pkgs.stdenv.mkDerivation
-            {
-              pname = "magic-enum";
-              version = "0.8.2";
-              src = magic-enum-repo;
-              doCheck = true;
-              nativeBuildInputs = with pkgs; [ cmake ];
-            };
 
           nativeBuildInputs = with pkgs; [
             cmake
@@ -33,7 +20,8 @@
             libsForQt5.qt5.wrapQtAppsHook
           ];
           buildInputs = with pkgs; [
-            nlohmann_json
+            tomlplusplus
+            cli11
             magic-enum
 
             libsndfile

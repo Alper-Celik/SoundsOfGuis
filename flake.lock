@@ -15,35 +15,18 @@
         "type": "github"
       }
     },
-    "magic-enum-repo": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1670586744,
-        "narHash": "sha256-k4zCEQxO0N/o1hDYxw5p9u0BMwP/5oIoe/4yw7oqEo0=",
-        "owner": "Neargye",
-        "repo": "magic_enum",
-        "rev": "e1a68e9dd3d2e9180b04c8aeacd4975db745e6b8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Neargye",
-        "ref": "v0.8.2",
-        "repo": "magic_enum",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1669833724,
-        "narHash": "sha256-/HEZNyGbnQecrgJnfE8d0WC5c1xuPSD2LUpB6YXlg4c=",
+        "lastModified": 1675757258,
+        "narHash": "sha256-pIRer8vdsoherlRKpzfnHbMZ5TsAcvRlXHCIaHkIUbg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4d2b37a84fad1091b9de401eb450aae66f1a741e",
+        "rev": "af96094e9b8eb162d70a84fa3b39f4b7a8b264d2",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "22.11",
+        "ref": "nixos-22.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -51,7 +34,6 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "magic-enum-repo": "magic-enum-repo",
         "nixpkgs": "nixpkgs"
       }
     }
