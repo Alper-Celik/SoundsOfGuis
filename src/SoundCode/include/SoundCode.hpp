@@ -1,6 +1,8 @@
 #pragma once
 
 #include "impl/_SoundSource.hpp"
+
+#include "element_type.hpp"
 #include "point3.hpp"
 
 #include <optional>
@@ -30,17 +32,18 @@ class SoundManager
     SoundManager &operator=(SoundManager &&) = default;
 
   private:
-    std::unordered_map<std::string,
+    std::unordered_map<sog::element_type,
                        std::pair<std::optional<unsigned int>, element_info>>
         sounds;
-    std::vector<std::tuple<std::string, element_info, SoundSource>> elements;
+    std::vector<std::tuple<sog::element_type, element_info, SoundSource>>
+        elements;
 
   public:
     void load_element(
-        std::string name, element_info element_info,
+        sog::element_type type, element_info element_info,
         std::optional<std::string> sound_file_path = std::nullopt);
 
-    void add_element(std::string name);
+    void add_element(sog::element_type type);
     void remove_last();
 
     void refresh_sounds();

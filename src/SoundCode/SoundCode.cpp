@@ -75,7 +75,8 @@ unsigned int load_sound(std::string sound_file_path)
     return buffer;
 }
 
-void SoundManager::load_element(std::string name, element_info element_info,
+void SoundManager::load_element(sog::element_type type,
+                                element_info element_info,
                                 std::optional<std::string> sound_file_path)
 {
     std::optional<unsigned int> sound_buffer;
@@ -84,16 +85,16 @@ void SoundManager::load_element(std::string name, element_info element_info,
     {
         sound_buffer = load_sound(*sound_file_path);
     }
-    sounds.emplace(name, std::make_pair(sound_buffer, element_info));
+    sounds.emplace(type, std::make_pair(sound_buffer, element_info));
 }
 
-void SoundManager::add_element(std::string name)
+void SoundManager::add_element(sog::element_type type)
 {
     element_info info{};
     std::optional<unsigned int> buffer{std::nullopt};
     try
     {
-        auto [_buffer, _info] = sounds.at(name);
+        auto [_buffer, _info] = sounds.at(type);
         info = _info;
         buffer = _buffer;
     }
@@ -108,7 +109,7 @@ void SoundManager::add_element(std::string name)
         source = SoundSource{*buffer};
     }
 
-    elements.emplace_back(name, info, std::move(source));
+    elements.emplace_back(type, info, std::move(source));
 }
 void SoundManager::remove_last()
 {
