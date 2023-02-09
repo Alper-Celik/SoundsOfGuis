@@ -1,5 +1,4 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , cmake
 , ninja
 , pkg-config
@@ -21,12 +20,14 @@
 , qtbase
 
 , src
-}: mkDerivation {
+, breakpointHook
+}: stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
     wrapQtAppsHook
+    # breakpointHook
   ];
   buildInputs = [
     tomlplusplus
@@ -50,6 +51,10 @@
 
     qtbase
   ];
+  patchPhase = ''
+    export CCACHE_DIR="`pwd`/.ccache"
+  '';
+
   libbacktrace_header = "${libbacktrace}/include/backtrace.h";
 
   src = src;
