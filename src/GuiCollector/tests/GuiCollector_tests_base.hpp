@@ -76,7 +76,7 @@ Window {
 }                         )",
           gui_init_lock) {
     std::this_thread::sleep_for(
-        std::chrono::milliseconds{500}); // let the  gui initilize
+        std::chrono::milliseconds{800}); // let the  gui initilize
     std::unique_lock<std::mutex> test_lock{gui_init_lock};
     QScreen *screen =
         QApplication::primaryScreen(); // TODO: am i leaking memory ?
