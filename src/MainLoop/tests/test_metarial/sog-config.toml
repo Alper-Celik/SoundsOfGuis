@@ -1,0 +1,33 @@
+additional_data_dirs = [
+  "sounds",
+  "sounds/more_sounds",
+  "sonds2",
+] # optional looked this dirs before looking up to other system directiories specified by xdg base dir(on linux)
+
+#optional default config used if not exists
+[list] # element name as table 
+#element names are src/Utils/include/element_type.hpp enum names
+
+# optional no sound played if not exists
+sound_file = "test/list.wav" # file looked up on additional_data_dirs 
+# this gets from ./sounds/test/list.wav
+
+# optional false if not specified
+looping = true # loops sound while active
+
+# optional a map containing x,y,z or an float setting x only. default is 0,0,0
+distance_to_other = { x = 1, y = 2, z = 0 } # distance to last sound
+
+[list_item]
+sound_file = "item_of_list.wav" # should be ./sounds/more_sounds/item_of_list.wav
+
+distance_to_other = 3 # x = 3, y = 0, z = 0
+
+#[window]
+#no sound no distance empty.
+
+#same as
+#[undefined]
+#distance_to_other = 0.5
+undefined.distance_to_other = 0.5 # toml supports these
+# distance_to_other can be float number
