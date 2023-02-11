@@ -2,6 +2,7 @@
 
 #include "impl/_SoundSource.hpp"
 
+#include "element_info.hpp"
 #include "element_type.hpp"
 #include "point3.hpp"
 
@@ -13,10 +14,6 @@
 
 namespace sog {
 
-struct element_info {
-  point3 distance_to_other = {0, 0, 0};
-  bool is_looping = false;
-};
 unsigned int load_sound(std::string path);
 class SoundManager {
 public:
