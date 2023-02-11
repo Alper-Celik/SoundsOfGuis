@@ -5,8 +5,6 @@
 #include <deque>
 #include <filesystem>
 namespace sog {
-constexpr std::string_view program_name = "SoundsOfGuis";
-constexpr std::string_view config_file_name = "sog-config";
 class MainLoop {
   sog::GuiCollector gui_collector;
   sog::SoundManager sound_manger;
