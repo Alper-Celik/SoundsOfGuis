@@ -21,8 +21,6 @@ public:
   MainLoop &operator=(MainLoop &&) = default;
   MainLoop(MainLoop &&) = default;
 
-  std::filesystem::path get_config_file();
-  std::vector<std::filesystem::path> get_data_dirs();
   void update_gui_tree();
   void update_sounds();
 };
