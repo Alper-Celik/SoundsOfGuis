@@ -49,7 +49,7 @@ TEST_CASE("add remove elements", "[SoundCode]") {
 
   CHECK(sounds.elements.size() == 2);
   CHECK(type2 == sog::element_type::undefined);
-  CHECK(info2.distance_to_other == sog::point3{1, 1, 1});
+  CHECK(info2.distance_to_other == sog::Point3{1, 1, 1});
   sounds.remove_last();
 
   CHECK(sounds.elements.size() == 1);
@@ -80,7 +80,7 @@ TEST_CASE("refresh sounds", "[SoundCode]") {
 
   CHECK(source_window.is_looping());
 
-  CHECK(source_list_item.get_position() == point3{0, 0, 0});
+  CHECK(source_list_item.get_position() == Point3{0, 0, 0});
   CHECK(source_list.get_position() == info_list_item.distance_to_other);
   CHECK(source_window.get_position() ==
         info_list_item.distance_to_other + info_list.distance_to_other);

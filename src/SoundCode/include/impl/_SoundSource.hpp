@@ -24,7 +24,7 @@ public:
   bool is_initial();
   void loop(bool loop = true);
   bool is_looping();
-  void set_position(point3 pos);
-  point3 get_position();
+  void set_position(Point3 pos);
+  Point3 get_position();
 };
 } // namespace sog

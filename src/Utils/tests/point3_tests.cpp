@@ -4,15 +4,15 @@
 
 TEST_CASE("point3 equality") {
   using namespace sog;
-  CHECK(point3{1, 1, 1} == point3{1, 1, 1});
-  CHECK_FALSE(point3{0, 1, 1} == point3{1, 1, 1});
-  CHECK(point3{0, 1, 1} != point3{1, 1, 1});
+  CHECK(Point3{1, 1, 1} == Point3{1, 1, 1});
+  CHECK_FALSE(Point3{0, 1, 1} == Point3{1, 1, 1});
+  CHECK(Point3{0, 1, 1} != Point3{1, 1, 1});
 }
 
 TEST_CASE("point 3 addition") {
   using namespace sog;
 
-  point3 a{1, 2, 2}, b{1, 1, 2}, c{2, 3, 4};
+  Point3 a{1, 2, 2}, b{1, 1, 2}, c{2, 3, 4};
   CHECK(c == a + b);
   CHECK(c == b + a);
   a += b;
@@ -21,7 +21,7 @@ TEST_CASE("point 3 addition") {
 TEST_CASE("point 3 substraction") {
   using namespace sog;
 
-  point3 a{1, 2, 2}, b{1, 1, 2}, c{2, 3, 4};
+  Point3 a{1, 2, 2}, b{1, 1, 2}, c{2, 3, 4};
   CHECK(b == c - a);
   c -= a;
   CHECK(b == c);

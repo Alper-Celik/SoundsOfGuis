@@ -1,30 +1,30 @@
 #pragma once
 namespace sog {
-struct point3 {
+struct Point3 {
   float x = 0, y = 0, z = 0;
-  point3 &operator+=(const point3 &other) {
+  Point3 &operator+=(const Point3 &other) {
     x += other.x;
     y += other.y;
     z += other.z;
     return *this;
   };
-  point3 &operator-=(const point3 &other) {
+  Point3 &operator-=(const Point3 &other) {
     x -= other.x;
     y -= other.y;
     z -= other.z;
     return *this;
   };
-  point3 operator+(const point3 &other) {
-    point3 _out = *this;
+  Point3 operator+(const Point3 &other) {
+    Point3 _out = *this;
     _out += other;
     return _out;
   };
-  point3 operator-(const point3 &other) {
-    point3 _out = *this;
+  Point3 operator-(const Point3 &other) {
+    Point3 _out = *this;
     _out -= other;
     return _out;
   };
-  bool operator==(const point3 &) const = default;
-  bool operator!=(const point3 &) const = default;
+  bool operator==(const Point3 &) const = default;
+  bool operator!=(const Point3 &) const = default;
 };
 } // namespace sog

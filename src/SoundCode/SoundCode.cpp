@@ -67,7 +67,7 @@ unsigned int load_sound(std::string sound_file_path) {
 }
 
 void SoundManager::load_element(sog::element_type type,
-                                element_info element_info,
+                                ElementInfo element_info,
                                 std::optional<std::string> sound_file_path) {
   std::optional<unsigned int> sound_buffer;
 
@@ -78,7 +78,7 @@ void SoundManager::load_element(sog::element_type type,
 }
 
 void SoundManager::add_element(sog::element_type type) {
-  element_info info{};
+  ElementInfo info{};
   std::optional<unsigned int> buffer{std::nullopt};
   try {
     auto [_buffer, _info] = sounds.at(type);
@@ -109,7 +109,7 @@ void SoundManager::refresh_sounds() {
     alcProcessContext(alcGetCurrentContext());
   }); // resume context at end of scope or at exception
 
-  point3 last_pos{0, 0, 0};
+  Point3 last_pos{0, 0, 0};
   for (auto &[name, info, source] : boost::adaptors::reverse(elements)) {
     source.set_position(last_pos);
     last_pos += info.distance_to_other;

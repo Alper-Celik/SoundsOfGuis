@@ -10,7 +10,7 @@ namespace sog {
 MainLoop::MainLoop() {}
 
 void MainLoop::update_gui_tree() {
-  point2<int> mouse_pos = gui_collector.get_mouse_pos();
+  Point2<int> mouse_pos = gui_collector.get_mouse_pos();
   std::optional<GuiElement> element_under_cursor =
       gui_collector.get_control_at_pos(mouse_pos);
 

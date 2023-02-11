@@ -95,16 +95,16 @@ GuiCollector::~GuiCollector() {
   xdo_free(static_cast<xdo_t *>(xdo.get()));
 }
 
-void GuiCollector::set_mouse_pos(point2<int> pos) {
+void GuiCollector::set_mouse_pos(Point2<int> pos) {
   atspi_generate_mouse_event(pos.x, pos.y, "abs", nullptr);
 }
 
-point2<int> GuiCollector::get_mouse_pos() {
+Point2<int> GuiCollector::get_mouse_pos() {
   int screen, x, y;
   xdo_get_mouse_location(static_cast<xdo_t *>(xdo.get()), &x, &y, &screen);
   return {x, y};
 }
-std::optional<GuiElement> GuiCollector::get_control_at_pos(point2<int> pos) {
+std::optional<GuiElement> GuiCollector::get_control_at_pos(Point2<int> pos) {
   int application_count = atspi_accessible_get_child_count(desktop, nullptr);
 
   for (int application_index = 0; application_index < application_count;

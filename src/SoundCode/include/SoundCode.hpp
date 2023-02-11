@@ -27,13 +27,12 @@ public:
 
 private:
   std::unordered_map<sog::element_type,
-                     std::pair<std::optional<unsigned int>, element_info>>
+                     std::pair<std::optional<unsigned int>, ElementInfo>>
       sounds;
-  std::vector<std::tuple<sog::element_type, element_info, SoundSource>>
-      elements;
+  std::vector<std::tuple<sog::element_type, ElementInfo, SoundSource>> elements;
 
 public:
-  void load_element(sog::element_type type, element_info element_info,
+  void load_element(sog::element_type type, ElementInfo element_info,
                     std::optional<std::string> sound_file_path = std::nullopt);
 
   void add_element(sog::element_type type);

@@ -12,5 +12,5 @@ TEST_CASE("mouse pos tests") {
   }); // make it less annoying while developing
 
   collector.set_mouse_pos({10, 10});
-  CHECK(collector.get_mouse_pos() == sog::point2<int>{10, 10});
+  CHECK(collector.get_mouse_pos() == sog::Point2<int>{10, 10});
 };

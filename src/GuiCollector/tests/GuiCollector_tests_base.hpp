@@ -30,7 +30,7 @@ struct Gui_test_fixture {
   sog::GuiCollector collector;
   std::mutex gui_init_lock;
   gui_wrapper s;
-  sog::point2<int> window_pos, list_pos, list_item_pos;
+  sog::Point2<int> window_pos, list_pos, list_item_pos;
   Gui_test_fixture()
       : s(R"(
 import QtQuick 2.15
@@ -84,9 +84,9 @@ Window {
     auto center = screen->geometry().center().x();
 
     window_pos =
-        sog::point2<int>{.x = center, .y = screen->geometry().bottom() - 20};
-    list_pos = sog::point2<int>{window_pos / sog::point2<int>{1, 2}};
-    list_item_pos = sog::point2<int>{list_pos / sog::point2<int>{1, 2}};
+        sog::Point2<int>{.x = center, .y = screen->geometry().bottom() - 20};
+    list_pos = sog::Point2<int>{window_pos / sog::Point2<int>{1, 2}};
+    list_item_pos = sog::Point2<int>{list_pos / sog::Point2<int>{1, 2}};
 
     // getting positions is hacky better solutioun can be used
     // for example getting location data from gui using id's of elements

@@ -42,8 +42,8 @@ class GuiCollector {
 public:
   ~GuiCollector();
   GuiCollector();
-  point2<int> get_mouse_pos();
-  void set_mouse_pos(point2<int> pos);
-  std::optional<GuiElement> get_control_at_pos(point2<int> pos);
+  Point2<int> get_mouse_pos();
+  void set_mouse_pos(Point2<int> pos);
+  std::optional<GuiElement> get_control_at_pos(Point2<int> pos);
 };
 } // namespace sog
