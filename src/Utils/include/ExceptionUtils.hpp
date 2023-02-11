@@ -9,7 +9,7 @@
 namespace sog {
 using traced =
     boost::error_info<struct tag_stacktrace, boost::stacktrace::stacktrace>;
-template <class E> void throw_with_trace(const E &e) {
+template <typename E> void throw_with_trace(const E &e) {
   throw boost::enable_error_info(e) << traced(boost::stacktrace::stacktrace());
 }
 inline void get_exception_with_stacktrace(const std::exception &exception) {
