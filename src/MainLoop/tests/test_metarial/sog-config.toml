@@ -8,14 +8,14 @@ additional_data_dirs = [
 [list] # element name as table 
 #element names are src/Utils/include/element_type.hpp enum names
 
-# optional no sound played if not exists
+# optional no sound played by default
 sound_file = "test/list.wav" # file looked up on additional_data_dirs 
 # this gets from ./sounds/test/list.wav
 
-# optional false if not specified
+# optional default is false
 looping = true # loops sound while active
 
-# optional a map containing x,y,z or an float setting x only. default is 0,0,0
+# optional a map containing x,y,z or an float setting x only and getting others from default settings. default is 0,0,0
 distance_to_other = { x = 1, y = 2, z = 0 } # distance to last sound
 
 [list_item]
@@ -23,11 +23,22 @@ sound_file = "item_of_list.wav" # should be ./sounds/more_sounds/item_of_list.wa
 
 distance_to_other = 3 # x = 3, y = 0, z = 0
 
-#[window]
-#no sound no distance empty.
-
-#same as
-#[undefined]
-#distance_to_other = 0.5
-undefined.distance_to_other = 0.5 # toml supports these
+# same as
+# [unknown_element]
+# distance_to_other = 0.5
+unknown_element.distance_to_other = 0.5 # toml supports these
 # distance_to_other can be float number
+
+
+# this does not effect default options of defined elements
+# sets all options for undefined elements
+[undefined_element]
+distance_to_other = 0.05
+
+# [window]
+# [window] is [undefined_table]
+
+# allows you to override program defaults
+# only effects undefined variebles
+[default]
+distance_to_other = { z = 0.05 } # only effects z axis on undefined
