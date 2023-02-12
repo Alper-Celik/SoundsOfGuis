@@ -18,23 +18,23 @@ TEST_CASE("mono channel sound load", "[SoundCode][load_element]") {
   auto sound_file_path = metarial_dir / "mono_sound.wav";
   sog::SoundManager sounds{};
 
-  sounds.load_element(sog::element_type::undefined, {},
+  sounds.load_element(sog::element_type::unknown_element, {},
                       sound_file_path.string());
-  sounds.sounds.at(sog::element_type::undefined);
+  sounds.sounds.at(sog::element_type::unknown_element);
 }
 TEST_CASE("stereo channel sound load", "[SoundCode][load_element]") {
   auto sound_file_path = metarial_dir / "stereo_sound.wav";
   sog::SoundManager sounds{};
 
-  CHECK_THROWS_WITH(sounds.load_element(sog::element_type::undefined, {},
+  CHECK_THROWS_WITH(sounds.load_element(sog::element_type::unknown_element, {},
                                         sound_file_path.string()),
                     Catch::Matchers::ContainsSubstring(
                         "contains more than 1 channel which is unsupported"));
 }
 TEST_CASE("soundless sound load", "[SoundCode][load_element]") {
   sog::SoundManager sounds{};
-  sounds.load_element(sog::element_type::undefined, {});
-  auto [buffer, info] = sounds.sounds.at(sog::element_type::undefined);
+  sounds.load_element(sog::element_type::unknown_element, {});
+  auto [buffer, info] = sounds.sounds.at(sog::element_type::unknown_element);
 
   CHECK_FALSE(buffer.has_value());
 }
@@ -42,13 +42,13 @@ TEST_CASE("soundless sound load", "[SoundCode][load_element]") {
 TEST_CASE("add remove elements", "[SoundCode]") {
 
   sog::SoundManager sounds{};
-  sounds.load_element(sog::element_type::undefined, {1, 1, 1});
-  sounds.add_element(sog::element_type::undefined);
-  sounds.add_element(sog::element_type::undefined);
+  sounds.load_element(sog::element_type::unknown_element, {1, 1, 1});
+  sounds.add_element(sog::element_type::unknown_element);
+  sounds.add_element(sog::element_type::unknown_element);
   auto &[type2, info2, source2] = sounds.elements.at(1);
 
   CHECK(sounds.elements.size() == 2);
-  CHECK(type2 == sog::element_type::undefined);
+  CHECK(type2 == sog::element_type::unknown_element);
   CHECK(info2.distance_to_other == sog::Point3{1, 1, 1});
   sounds.remove_last();
 

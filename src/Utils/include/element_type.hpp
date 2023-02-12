@@ -1,7 +1,7 @@
 #pragma once
 namespace sog {
 enum class element_type {
-  undefined,
+  unknown_element,
   window,
   list,
   list_item,
