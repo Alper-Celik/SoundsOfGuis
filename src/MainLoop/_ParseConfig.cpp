@@ -1,13 +1,13 @@
 #include "_ParseConfig.hpp"
 
+#include "_GetDirs.hpp"
+
+#include <boost/range/adaptor/reversed.hpp>
 #include <magic_enum.hpp>
 #include <toml++/toml.h>
 
 namespace sog {
 namespace fs = std::filesystem;
-std::optional<fs::path>
-find_sound_file(fs::path file,
-                const std::deque<fs::path> &data_dirs); // TODO: implement
 
 sog::CompleteElementInfo
 get_element_info(toml::node_view<toml::node> table,
@@ -33,12 +33,29 @@ get_element_info(toml::node_view<toml::node> table,
     }
 
     if (auto sound_file = table["sound_file"]; sound_file.is_string()) {
-      info.sound_file =
-          find_sound_file(*sound_file.value<fs::path>(), data_dirs);
+      info.sound_file = find_file(*sound_file.value<fs::path>(), data_dirs);
     }
   }
 
   return info;
+}
+
+void update_data_dirs(toml::node_view<toml::node> data_dirs_array,
+                      fs::path base_dir, std::deque<fs::path> &data_dirs) {
+  auto additional_data_dirs = data_dirs_array.value<toml::array>();
+  if (additional_data_dirs.has_value()) {
+    for (auto &&additional_data_dir_cfg :
+         boost::adaptors::reverse(*additional_data_dirs)) {
+
+      std::optional<fs::path> additional_data_dir =
+          additional_data_dir_cfg.value<fs::path>();
+      if (additional_data_dir.has_value()) {
+        data_dirs.push_front(base_dir / *additional_data_dir);
+      } else {
+        // TODO: log invalid input
+      }
+    }
+  }
 }
 
 std::unordered_map<sog::element_type, sog::CompleteElementInfo>
@@ -50,10 +67,19 @@ parse_config(std::filesystem::path config_file,
   try {
     config = toml::parse_file(std::filesystem::absolute(config_file).string());
   } catch (const std::filesystem::filesystem_error &err) {
-    // TODO:o
+    // TODO:
   } catch (const toml::parse_error &err) {
     // TODO:
   }
+
+  update_data_dirs(config["additional_data_dirs"], config_file.parent_path(),
+                   data_dirs);
+
+  sog::CompleteElementInfo default_element_info = get_element_info(
+      config["default"], default_default_element_info, data_dirs);
+
+  sog::CompleteElementInfo undefined_element_info = get_element_info(
+      config["undefined_element"], default_element_info, data_dirs);
 
   std::unordered_map<sog::element_type, sog::CompleteElementInfo> ret_val;
 
@@ -63,8 +89,12 @@ parse_config(std::filesystem::path config_file,
 
     toml::node_view<toml::node> element_config = config[enum_string];
     if (element_config.is_table()) {
+      ret_val[enum_value] =
+          get_element_info(element_config, default_element_info, data_dirs);
+    } else {
+      ret_val[enum_value] = undefined_element_info;
     }
   }
-  return {};
+  return ret_val;
 }
 } // namespace sog

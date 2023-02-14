@@ -29,10 +29,11 @@ distance_to_other = 3 # x = 3, y = 0, z = 0
 unknown_element.distance_to_other = 0.5 # toml supports these
 # distance_to_other can be float number
 
+##special tables
 
 # this does not effect default options of defined elements
 # sets all options for undefined elements
-[undefined_element]
+[undefined_element] # settings of elements do not have table
 distance_to_other = 0.05
 
 # [window]
@@ -40,5 +41,6 @@ distance_to_other = 0.05
 
 # allows you to override program defaults
 # only effects undefined variebles
+# effects undefined_element too
 [default]
 distance_to_other = { z = 0.05 } # only effects z axis on undefined

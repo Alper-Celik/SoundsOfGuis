@@ -8,6 +8,16 @@
 
 namespace fs = std::filesystem;
 namespace sog {
+std::optional<fs::path> find_file(fs::path file,
+                                  const std::deque<fs::path> &data_dirs,
+                                  fs::file_type file_type) {
+  for (const fs::path &dir_predicate : data_dirs) {
+    if (fs::path file_predicate = dir_predicate / file;
+        fs::status(file_predicate).type() == file_type)
+      return file_predicate;
+  }
+  return {};
+}
 
 void make_dir_if_not_exists(const fs::path &dir) {
   if (not fs::exists(dir)) {
