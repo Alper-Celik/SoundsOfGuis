@@ -1,6 +1,7 @@
-add_executable(MainLoop_lib_tests _GetDirs_tests.cpp)
-target_link_libraries(MainLoop_lib_tests PRIVATE Catch2::Catch2WithMain
-                                                 SOG::MainLoop SOG::Utils)
+add_executable(MainLoop_lib_tests _GetDirs_tests.cpp _ParseConfig_tests.cpp)
+target_link_libraries(
+  MainLoop_lib_tests PRIVATE Catch2::Catch2WithMain SOG::MainLoop SOG::Utils
+                             magic_enum::magic_enum)
 
 cmake_path(CONVERT "${CMAKE_CURRENT_SOURCE_DIR}/test_metarial"
            TO_NATIVE_PATH_LIST test_metarial)

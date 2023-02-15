@@ -17,7 +17,7 @@ get_element_info(toml::node_view<toml::node> table,
 
   if (table.is_table()) {
     default_info.element_info.is_looping =
-        table.value_or(default_info.element_info.is_looping);
+        table["looping"].value_or(default_info.element_info.is_looping);
 
     if (auto distance_to_other = table["distance_to_other"];
         distance_to_other.is_number()) {

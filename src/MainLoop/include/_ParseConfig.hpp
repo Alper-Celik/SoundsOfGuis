@@ -9,4 +9,5 @@ std::unordered_map<sog::element_type, sog::CompleteElementInfo>
 parse_config(std::filesystem::path config_file,
              std::deque<std::filesystem::path> data_dirs,
              sog::CompleteElementInfo default_default_element_info = {});
-}
+// NOTE: maybe test internal functions too
+} // namespace sog
