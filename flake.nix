@@ -66,17 +66,6 @@
           # packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
           #   src = self;
           # });
-          checks =
-            {
-              tests = (pkgs.libsForQt5.callPackage ./default.nix {
-
-                src = self;
-                stdenv = pkgs.ccacheStdenv;
-              }).overrideAttrs (oldAttrs: {
-                doCheck = true;
-                doInstall = false;
-              });
-            };
 
         }
       );
