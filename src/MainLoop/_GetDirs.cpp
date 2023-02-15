@@ -106,4 +106,6 @@ fs::path get_config_file() {
 
   std::terminate();
 }
+std::deque<fs::path> get_data_dirs() { return {}; } // TODO: implent
+
 } // namespace sog
