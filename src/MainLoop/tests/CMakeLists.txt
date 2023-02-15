@@ -1,4 +1,4 @@
-add_executable(MainLoop_lib_tests config_loader_tests.cpp)
+add_executable(MainLoop_lib_tests _GetDirs_tests.cpp)
 target_link_libraries(MainLoop_lib_tests PRIVATE Catch2::Catch2WithMain
                                                  SOG::MainLoop SOG::Utils)
 
