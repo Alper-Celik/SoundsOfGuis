@@ -7,9 +7,9 @@
 
 #include <filesystem>
 #include <thread>
-namespace {
+
 std::filesystem::path metarial_dir{TEST_METARIAL_DIR};
-}
+
 TEST_CASE("invariant of SoundSource", "[internal][SoundCode]") {
   using namespace sog;
   SoundManager s; // initilize al context
