@@ -33,7 +33,7 @@ get_element_info(toml::node_view<toml::node> table,
     }
 
     if (auto sound_file = table["sound_file"]; sound_file.is_string()) {
-      info.sound_file = find_file(*sound_file.value<fs::path>(), data_dirs);
+      info.sound_file = find_file(*sound_file.value<std::string>(), data_dirs);
     }
   }
 
@@ -42,13 +42,13 @@ get_element_info(toml::node_view<toml::node> table,
 
 void update_data_dirs(toml::node_view<toml::node> data_dirs_array,
                       fs::path base_dir, std::deque<fs::path> &data_dirs) {
-  auto additional_data_dirs = data_dirs_array.value<toml::array>();
-  if (additional_data_dirs.has_value()) {
+  auto additional_data_dirs = data_dirs_array.as_array();
+  if (additional_data_dirs != nullptr) {
     for (auto &&additional_data_dir_cfg :
          boost::adaptors::reverse(*additional_data_dirs)) {
 
-      std::optional<fs::path> additional_data_dir =
-          additional_data_dir_cfg.value<fs::path>();
+      std::optional<std::string> additional_data_dir =
+          additional_data_dir_cfg.value<std::string>();
       if (additional_data_dir.has_value()) {
         data_dirs.push_front(base_dir / *additional_data_dir);
       } else {
