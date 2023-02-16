@@ -23,10 +23,8 @@ sound_file = "item_of_list.wav" # should be ./sounds/more_sounds/item_of_list.wa
 
 distance_to_other = 3 # x = 3, y = 0, z = 0
 
-# same as
-# [unknown_element]
-# distance_to_other = 0.5
-unknown_element.distance_to_other = 0.5 # toml supports these
+[unknown_element]
+distance_to_other = 0.5
 # distance_to_other can be float number
 
 ##special tables
@@ -44,4 +42,3 @@ distance_to_other = 0.05
 # effects undefined_element too
 [default]
 distance_to_other = { z = 0.05 } # only effects z axis on undefined
-looping = true
