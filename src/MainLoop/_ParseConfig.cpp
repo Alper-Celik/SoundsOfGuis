@@ -16,7 +16,7 @@ get_element_info(toml::node_view<toml::node> table,
   sog::CompleteElementInfo info = default_info;
 
   if (table.is_table()) {
-    default_info.element_info.is_looping =
+    info.element_info.is_looping =
         table["looping"].value_or(default_info.element_info.is_looping);
 
     if (auto distance_to_other = table["distance_to_other"];
@@ -27,9 +27,9 @@ get_element_info(toml::node_view<toml::node> table,
 
       Point3 default_distance = default_info.element_info.distance_to_other;
       info.element_info.distance_to_other = {
-          .x = distance_to_other.value_or(default_distance.x),
-          .y = distance_to_other.value_or(default_distance.y),
-          .z = distance_to_other.value_or(default_distance.z)};
+          .x = distance_to_other["x"].value_or(default_distance.x),
+          .y = distance_to_other["y"].value_or(default_distance.y),
+          .z = distance_to_other["z"].value_or(default_distance.z)};
     }
 
     if (auto sound_file = table["sound_file"]; sound_file.is_string()) {
@@ -68,8 +68,10 @@ parse_config(std::filesystem::path config_file,
     config = toml::parse_file(std::filesystem::absolute(config_file).string());
   } catch (const std::filesystem::filesystem_error &err) {
     // TODO:
+    throw;
   } catch (const toml::parse_error &err) {
     // TODO:
+    throw;
   }
 
   update_data_dirs(config["additional_data_dirs"], config_file.parent_path(),
