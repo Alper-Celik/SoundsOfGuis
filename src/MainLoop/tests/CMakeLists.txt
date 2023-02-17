@@ -1,4 +1,4 @@
-add_executable(MainLoop_lib_tests _GetDirs_tests.cpp _ParseConfig_tests.cpp)
+add_executable(MainLoop_lib_tests GetDirs_tests.cpp ParseConfig_tests.cpp)
 target_link_libraries(
   MainLoop_lib_tests PRIVATE Catch2::Catch2WithMain SOG::MainLoop SOG::Utils
                              magic_enum::magic_enum)

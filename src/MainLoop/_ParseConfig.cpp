@@ -1,6 +1,6 @@
-#include "_ParseConfig.hpp"
+#include "ParseConfig.hpp"
 
-#include "_GetDirs.hpp"
+#include "GetDirs.hpp"
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <magic_enum.hpp>

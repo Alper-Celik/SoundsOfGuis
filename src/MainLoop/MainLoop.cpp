@@ -1,8 +1,8 @@
 #include "MainLoop.hpp"
 
 #include "ExceptionUtils.hpp"
-#include "_GetDirs.hpp"
-#include "_ParseConfig.hpp"
+#include "GetDirs.hpp"
+#include "ParseConfig.hpp"
 
 #include <boost/predef.h>
 
