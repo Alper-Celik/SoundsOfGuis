@@ -64,6 +64,7 @@ void MainLoop::update_sounds() {
   for (auto &&added_element : added_elements) {
     sound_manger.add_element(added_element.get_type());
   }
+  sound_manger.refresh_sounds();
 }
 
 } // namespace sog
