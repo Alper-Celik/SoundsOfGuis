@@ -10,9 +10,11 @@
 #include <fstream>
 
 namespace sog {
-MainLoop::MainLoop() {
+
+MainLoop::MainLoop(std::filesystem::path config_file,
+                   std::deque<std::filesystem::path> data_dirs) {
   std::unordered_map<sog::element_type, sog::CompleteElementInfo> config =
-      parse_config(get_config_file(), get_data_dirs());
+      parse_config(config_file, data_dirs);
 
   for (auto [type, info] : config) {
     sound_manger.load_element(type, info.element_info, info.sound_file);
@@ -41,16 +43,27 @@ void MainLoop::update_gui_tree() {
       goto subtree;
     }
   }
+
   removed_element_count = old_element_tree.size(); // all elements removed
 subtree:
   added_elements = new_added_elements;
+
   for (int i = 0; i < removed_element_count; i++) {
     old_element_tree.pop_back();
   }
+
   old_element_tree.insert(end(old_element_tree), begin(added_elements),
                           std::end(added_elements));
 };
 
-void MainLoop::update_sounds() {}
+void MainLoop::update_sounds() {
+  for (size_t i = 0; i < removed_element_count; i++) {
+    sound_manger.remove_last();
+  }
+
+  for (auto &&added_element : added_elements) {
+    sound_manger.add_element(added_element.get_type());
+  }
+}
 
 } // namespace sog
