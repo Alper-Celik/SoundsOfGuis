@@ -1,5 +1,8 @@
 #include "MainLoop.hpp"
+
 #include "ExceptionUtils.hpp"
+#include "_GetDirs.hpp"
+#include "_ParseConfig.hpp"
 
 #include <boost/predef.h>
 
@@ -7,7 +10,14 @@
 #include <fstream>
 
 namespace sog {
-MainLoop::MainLoop() {}
+MainLoop::MainLoop() {
+  std::unordered_map<sog::element_type, sog::CompleteElementInfo> config =
+      parse_config(get_config_file(), get_data_dirs());
+
+  for (auto [type, info] : config) {
+    sound_manger.load_element(type, info.element_info, info.sound_file);
+  }
+}
 
 void MainLoop::update_gui_tree() {
   Point2<int> mouse_pos = gui_collector.get_mouse_pos();
