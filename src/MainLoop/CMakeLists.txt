@@ -1,4 +1,4 @@
-add_library(MainLoop_lib MainLoop.cpp _GetDirs.cpp _ParseConfig.cpp)
+add_library(MainLoop_lib MainLoop.cpp GetDirs.cpp ParseConfig.cpp)
 target_include_directories(MainLoop_lib PUBLIC ./include)
 target_link_libraries(MainLoop_lib PUBLIC SOG::Sounds SOG::GuiCollector
                                           SOG::Utils)
