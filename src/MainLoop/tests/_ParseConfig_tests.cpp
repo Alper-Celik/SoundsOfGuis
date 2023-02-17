@@ -22,11 +22,17 @@ TEST_CASE("parse_config tests") {
   auto list_cfg = config.at(sog::element_type::list);
   CHECK(list_cfg.sound_file == metarial_dir / "sounds" / "test" / "list.wav");
   CHECK(list_cfg.element_info.is_looping == true);
-  CHECK(list_cfg.element_info.distance_to_other.x == 1);
-  CHECK(list_cfg.element_info.distance_to_other.y == 2);
-  CHECK(list_cfg.element_info.distance_to_other.z == 0);
+  CHECK(list_cfg.element_info.distance_to_other ==
+        sog::Point3{.x = 1, .y = 2, .z = 0});
 
   // undefined elements
   auto window_cfg = config.at(sog::element_type::window);
   CHECK(window_cfg.element_info.distance_to_other.x == 0.05f);
+
+  // default values
+  auto list_item_cfg = config.at(sog::element_type::list_item);
+  CHECK(list_item_cfg.element_info.distance_to_other.z == 0.06f);
+
+  // setting only x axis
+  CHECK(list_item_cfg.element_info.distance_to_other.x == 3);
 }

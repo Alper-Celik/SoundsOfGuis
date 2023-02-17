@@ -21,7 +21,7 @@ distance_to_other = { x = 1, y = 2, z = 0 } # distance to last sound
 [list_item]
 sound_file = "item_of_list.wav" # should be ./sounds/more_sounds/item_of_list.wav
 
-distance_to_other = 3 # x = 3, y = 0, z = 0
+distance_to_other = 3 # x = 3, y = 0, z = 0.06(because of [default] table)
 
 [unknown_element]
 distance_to_other = 0.5
@@ -41,4 +41,4 @@ distance_to_other = 0.05
 # only effects undefined variebles
 # effects undefined_element too
 [default]
-distance_to_other = { z = 0.05 } # only effects z axis on undefined
+distance_to_other = { z = 0.06 } # only effects z axis on undefined
