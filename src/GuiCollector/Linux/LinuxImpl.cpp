@@ -56,6 +56,15 @@ element_type GuiElement::get_type() // TODO: be smarter than map lookup
   return sog::AtspiMapping.at(type);
 }
 
+std::string GuiElement::get_native_element_type_name() {
+  return std::string{atspi_accessible_get_role_name(native_element, nullptr)};
+};
+
+std::string GuiElement::get_native_element_type_enum_name() {
+  return std::string{magic_enum::enum_name(
+      atspi_accessible_get_role(native_element, nullptr))};
+}
+
 gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle() {
   return native_element;
 }

@@ -30,6 +30,8 @@ public:
 
   std::optional<GuiElement> get_parent();
   element_type get_type();
+  std::string get_native_element_type_name();
+  std::string get_native_element_type_enum_name();
   gsl::not_null<native_hadle_t> get_handle();
   bool operator==(const GuiElement &other);
 };
