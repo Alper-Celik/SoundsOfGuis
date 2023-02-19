@@ -73,6 +73,7 @@ bool GuiElement::operator==(
     const GuiElement &other) // FIXME: id's might not be unique
                              //  and some toolkits might not expose it
                              //  NOTE: looks like only QT exposes id
+                             //  NOTE: use extents of it to compere maybe
 {
   gsl::not_null<gchar *> id_1_ptr =
       atspi_accessible_get_accessible_id(native_element, nullptr);
