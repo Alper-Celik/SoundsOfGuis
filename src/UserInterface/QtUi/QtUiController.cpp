@@ -25,20 +25,22 @@ QtUiController::QtUiController()
                                    "benim programımın algıladığı"});
         tree_ptr->show();
 
+        init_lock.unlock();
+
         app_ptr->exec();
-      }) {}
+      }) {
+  init_lock.lock();
+}
 QtUiController::~QtUiController() { app_ptr->quit(); }
 
-void QtUiController::update_ui(std::vector<ElementDisplayInfo> added_elements,
-                               std::size_t removed_elements) {
+void QtUiController::update_gui(std::vector<ElementDisplayInfo> added_elements,
+                                std::size_t removed_elements) {
+  std::lock_guard<std::mutex> lock{init_lock};
   QMetaObject::invokeMethod(
       app_ptr->thread(),
       [&] {
         for (std::size_t i = 0; i < removed_elements; i++) {
-          auto item_to_remove =
-              tree_ptr->itemAt(tree_ptr->topLevelItemCount() - 1, 0);
-          tree_ptr->removeItemWidget(item_to_remove, 0);
-          tree_ptr->removeItemWidget(item_to_remove, 1);
+          delete tree_ptr->takeTopLevelItem(tree_ptr->topLevelItemCount() - 1);
         }
         for (auto &&added_element : added_elements) {
           auto toqstr = [](auto str) { return QString::fromStdString(str); };

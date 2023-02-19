@@ -6,11 +6,13 @@
 #include <CLI/CLI.hpp>
 
 int main(int argc, char *argv[]) {
-  sog::QtUiController gui;
+  sog::QtUiController gui; // TODO: pass args to qt app
+                           // is that effects thread safety?
+
   CLI::App app{};
 
+  sog::MainLoop loop;
   while (true) {
-    sog::MainLoop loop;
     loop.update_gui_tree();
     loop.update_sounds();
 
@@ -23,6 +25,6 @@ int main(int argc, char *argv[]) {
               added_element.get_native_element_type_enum_name()});
     }
 
-    gui.update_ui(added_elements_info, loop.removed_element_count);
+    gui.update_gui(added_elements_info, loop.removed_element_count);
   }
 }

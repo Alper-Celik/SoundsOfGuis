@@ -24,11 +24,12 @@ public:
   QApplication *app_ptr;
   QTreeWidget *tree_ptr;
   std::jthread gui_thread;
+  std::mutex init_lock;
 
   QtUiController();
   ~QtUiController();
 
-  void update_ui(std::vector<ElementDisplayInfo> added_elements,
-                 std::size_t removed_elements = 0);
+  void update_gui(std::vector<ElementDisplayInfo> added_elements,
+                  std::size_t removed_elements = 0);
 };
 } // namespace sog
