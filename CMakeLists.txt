@@ -14,11 +14,14 @@ find_package(fmt CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
+find_package(CLI11 CONFIG REQUIRED)
 
-find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets Qml Core)
+find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets Qml Quick Core)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+add_compile_definitions(
+  $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   find_package(Atspi-2 CONFIG REQUIRED)
