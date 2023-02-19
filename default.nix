@@ -18,6 +18,7 @@
 , at-spi2-core
 , xdotool
 , qtbase
+, qtdeclarative
 
 , src
 , breakpointHook
@@ -50,6 +51,7 @@
     xdotool
 
     qtbase
+    qtdeclarative
   ];
   patchPhase = ''
     export CCACHE_DIR="`pwd`/.ccache"

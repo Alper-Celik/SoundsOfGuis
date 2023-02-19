@@ -60,6 +60,7 @@
                 oldAttrs: {
                   QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
                   QT_ACCESSIBILITY = 1;
+                  QT_QPA_PLATFORM_PLUGIN_PATH = "${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
                 }
               );
             };
