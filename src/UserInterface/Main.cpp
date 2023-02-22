@@ -5,13 +5,21 @@
 
 #include <CLI/CLI.hpp>
 
+#include <filesystem>
+
 int main(int argc, char *argv[]) {
   sog::QtUiController gui; // TODO: pass args to qt app
                            // is that effects thread safety?
 
+  std::filesystem::path config_file = sog::get_config_file();
+  std::deque<std::filesystem::path> data_dirs = sog::get_data_dirs();
   CLI::App app{};
+  app.add_option("--config-file,-c", config_file, "specify config file");
+  app.add_option("--data-dirs,-data-dir,-d", data_dirs,
+                 "set data dir(s) overrides XDG_DATA_HOME, ~/local/share/ and "
+                 "XDG_DATA_DIRS");
 
-  sog::MainLoop loop;
+  sog::MainLoop loop(config_file, data_dirs);
   while (true) {
     loop.update_gui_tree();
     loop.update_sounds();

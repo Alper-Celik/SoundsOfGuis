@@ -65,27 +65,28 @@ std::string GuiElement::get_native_element_type_enum_name() {
       atspi_accessible_get_role(native_element, nullptr))};
 }
 
-gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle() {
+gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle() const {
   return native_element;
 }
 
-bool GuiElement::operator==(
-    const GuiElement &other) // FIXME: id's might not be unique
-                             //  and some toolkits might not expose it
-                             //  NOTE: looks like only QT exposes id
-                             //  NOTE: use extents of it to compere maybe
-{
-  gsl::not_null<gchar *> id_1_ptr =
-      atspi_accessible_get_accessible_id(native_element, nullptr);
-  auto free_id_1 = gsl::finally([&] { g_free(id_1_ptr); });
+bool GuiElement::operator==(const GuiElement &other) {
+  // NOTE: coudl cache some info about element at object creation for static
+  // information and use them to avoid asking elements for info over ipc which
+  // might be slow
 
-  gsl::not_null<gchar *> id_2_ptr =
-      atspi_accessible_get_accessible_id(other.native_element, nullptr);
-  auto free_id_2 = gsl::finally([&] { g_free(id_2_ptr); });
+  std::unique_ptr<AtspiRect> current_extents{atspi_component_get_extents(
+      atspi_accessible_get_component_iface(this->get_handle()),
+      ATSPI_COORD_TYPE_SCREEN, nullptr)};
 
-  std::string_view id_1{id_1_ptr}, id_2{id_2_ptr};
+  std::unique_ptr<AtspiRect> other_extents{atspi_component_get_extents(
+      atspi_accessible_get_component_iface(other.get_handle()),
+      ATSPI_COORD_TYPE_SCREEN, nullptr)};
 
-  return id_1 == id_2;
+  bool is_extents_same = current_extents->x == other_extents->x &&
+                         current_extents->y == other_extents->y &&
+                         current_extents->width == other_extents->width &&
+                         current_extents->height == other_extents->height;
+  return is_extents_same;
 }
 
 GuiElement::~GuiElement() { g_object_unref(native_element); }
