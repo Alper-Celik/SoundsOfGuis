@@ -2,7 +2,7 @@
   description = "experimental accessiblity project (deneysel erişilebilirlik projesi)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
   };
@@ -15,8 +15,13 @@
             {
               inherit system;
               overlays = [
-                (self: super: {
-                  ccacheWrapper = super.ccacheWrapper.override {
+                (final: prev: {
+                  magic-enum = prev.magic-enum.overrideAttrs (prev: {
+                    cmakeFlags = [
+                      "-DMAGIC_ENUM_OPT_BUILD_TESTS=OFF"
+                    ];
+                  });
+                  ccacheWrapper = prev.ccacheWrapper.override {
                     # from https://nixos.wiki/wiki/CCache#Non-NixOS
                     # and some modifications
                     extraConfig = ''
