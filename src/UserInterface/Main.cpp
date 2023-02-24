@@ -15,9 +15,10 @@ int main(int argc, char *argv[]) {
   std::deque<std::filesystem::path> data_dirs = sog::get_data_dirs();
   CLI::App app{};
   app.add_option("--config-file,-c", config_file, "specify config file");
-  app.add_option("--data-dirs,-data-dir,-d", data_dirs,
+  app.add_option("--data-dirs,--data-dir,-d", data_dirs,
                  "set data dir(s) overrides XDG_DATA_HOME, ~/local/share/ and "
                  "XDG_DATA_DIRS");
+  CLI11_PARSE(app, argc, argv);
 
   sog::MainLoop loop(config_file, data_dirs);
   while (true) {
