@@ -11,14 +11,30 @@
 #include <magic_enum.hpp>
 #include <xdo.h>
 
+#include <string_view>
+
 /// TODO : add proper error handling of At-spi
 
 namespace sog {
+std::size_t get_gui_element_hash(AtspiAccessible *native_element) {
+  std::unique_ptr<gchar, void (*)(gchar *)> accessible_id(
+      atspi_accessible_get_accessible_id(native_element, nullptr),
+      [](gchar *ptr) { g_free(ptr); });
+  std::size_t h1 =
+      std::hash<std::string_view>{}(std::string_view{accessible_id.get()});
+
+  std::size_t h2 = std::hash<AtspiRole>{}(
+      atspi_accessible_get_role(native_element, nullptr));
+
+  return h1 + h2;
+}
 
 GuiElement::GuiElement(AtspiAccessible *native_element)
-    : native_element(native_element){}; // TODO: enable accessiblity from dbus
+    : native_element(native_element) {
+  element_hash = get_gui_element_hash(get_handle());
+}; // TODO: enable accessiblity from dbus
 GuiElement::GuiElement(GuiElement &&other)
-    : native_element(other.native_element) {
+    : native_element(other.native_element), element_hash(other.element_hash) {
   g_object_ref(native_element.get());
 }
 GuiElement &GuiElement::operator=(GuiElement &&other) {
@@ -27,12 +43,13 @@ GuiElement &GuiElement::operator=(GuiElement &&other) {
 };
 
 GuiElement::GuiElement(const GuiElement &other)
-    : native_element(other.native_element) {
+    : native_element(other.native_element), element_hash(other.element_hash) {
   g_object_ref(native_element.get());
 }
 GuiElement &GuiElement::operator=(const GuiElement &other) {
   g_object_unref(native_element);
   native_element = other.native_element;
+  element_hash = other.element_hash;
   g_object_ref(native_element.get());
   return *this;
 }
@@ -70,9 +87,10 @@ gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle() const {
 }
 
 bool GuiElement::operator==(const GuiElement &other) {
-  // NOTE: coudl cache some info about element at object creation for static
-  // information and use them to avoid asking elements for info over ipc which
-  // might be slow
+
+  if (element_hash != other.element_hash) {
+    return false;
+  }
 
   std::unique_ptr<AtspiRect> current_extents{atspi_component_get_extents(
       atspi_accessible_get_component_iface(this->get_handle()),

@@ -17,7 +17,10 @@ public:
 
 private:
   gsl::not_null<native_hadle_t> native_element;
-
+  std::size_t
+      element_hash; // NOTE: if same, does not guarantee elements being same.
+                    //  only use it for not equels and do more tests for
+                    //  equality
 public:
   GuiElement(AtspiAccessible *native_element);
 
