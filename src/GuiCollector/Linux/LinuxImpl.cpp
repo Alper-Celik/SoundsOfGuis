@@ -32,7 +32,7 @@ std::size_t get_gui_element_hash(AtspiAccessible *native_element) {
 GuiElement::GuiElement(AtspiAccessible *native_element)
     : native_element(native_element) {
   element_hash = get_gui_element_hash(get_handle());
-}; // TODO: enable accessiblity from dbus
+};
 GuiElement::GuiElement(GuiElement &&other)
     : native_element(other.native_element), element_hash(other.element_hash) {
   g_object_ref(native_element.get());
@@ -114,6 +114,7 @@ GuiCollector::GuiCollector()
           0) // atspi-2 curruntly doesn't implement virtual desktops
               ),
       xdo(xdo_new(nullptr)) {
+  // TODO: enable accessiblity from dbus
   if (atspi_is_initialized() == false) {
     atspi_init();
   }
