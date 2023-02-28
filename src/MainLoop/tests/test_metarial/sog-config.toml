@@ -18,7 +18,7 @@ looping = true # loops sound while active
 # optional a map containing x,y,z or an float setting x only and getting others from default settings. default is 0,0,0
 distance_to_other = { x = 1, y = 2, z = 0 } # distance to last sound
 
-[list_item]
+[listitem]
 sound_file = "item_of_list.wav" # should be ./sounds/more_sounds/item_of_list.wav
 
 distance_to_other = 3 # x = 3, y = 0, z = 0.06(because of [default] table)

@@ -67,11 +67,11 @@ TEST_CASE("refresh sounds", "[SoundCode]") {
                       {.distance_to_other = {1, 2, 3}, .is_looping = true});
   sounds.load_element(sog::element_type::list,
                       {.distance_to_other = {2, 3, 4}});
-  sounds.load_element(sog::element_type::list_item, {});
+  sounds.load_element(sog::element_type::listitem, {});
 
   sounds.add_element(sog::element_type::window);
   sounds.add_element(sog::element_type::list);
-  sounds.add_element(sog::element_type::list_item);
+  sounds.add_element(sog::element_type::listitem);
   sounds.refresh_sounds();
   auto &[type_list_item, info_list_item, source_list_item] =
       sounds.elements.at(2);

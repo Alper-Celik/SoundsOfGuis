@@ -101,7 +101,7 @@ inline std::unordered_map<AtspiRole, sog::element_type> AtspiMapping{
 
     {AtspiRole::ATSPI_ROLE_LIST, sog::element_type::list},
 
-    {AtspiRole::ATSPI_ROLE_LIST_ITEM, sog::element_type::list_item},
+    {AtspiRole::ATSPI_ROLE_LIST_ITEM, sog::element_type::listitem},
     // TODO: add correct mapping
 
     {AtspiRole::ATSPI_ROLE_MENU, sog::element_type::unknown_element},
@@ -306,8 +306,7 @@ inline std::unordered_map<AtspiRole, sog::element_type> AtspiMapping{
     {AtspiRole::ATSPI_ROLE_COMMENT, sog::element_type::unknown_element},
     // TODO: add correct mapping
 
-    {AtspiRole::ATSPI_ROLE_LIST_BOX, sog::element_type::unknown_element},
-    // TODO: add correct mapping
+    {AtspiRole::ATSPI_ROLE_LIST_BOX, sog::element_type::listbox},
 
     {AtspiRole::ATSPI_ROLE_GROUPING, sog::element_type::unknown_element},
     // TODO: add correct mapping

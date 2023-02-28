@@ -30,7 +30,7 @@ TEST_CASE("parse_config tests") {
   CHECK(window_cfg.element_info.distance_to_other.x == 0.05f);
 
   // default values
-  auto list_item_cfg = config.at(sog::element_type::list_item);
+  auto list_item_cfg = config.at(sog::element_type::listitem);
   CHECK(list_item_cfg.element_info.distance_to_other.z == 0.06f);
 
   // setting only x axis
