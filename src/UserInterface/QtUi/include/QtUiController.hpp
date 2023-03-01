@@ -2,7 +2,6 @@
 #include "element_type.hpp"
 
 #include <QGuiApplication>
-#include <magic_enum.hpp>
 
 #include <cstddef>
 #include <qtreewidget.h>
@@ -13,8 +12,7 @@
 namespace sog {
 struct ElementDisplayInfo {
   sog::element_type detected_type;
-  std::string detected_type_name{
-      magic_enum::enum_name<sog::element_type>(detected_type)};
+  std::string detected_type_name;
   std::string native_type_name;
   std::string native_type_enum_name;
 };

@@ -4,6 +4,7 @@
 #include "QtUiController.hpp"
 
 #include <CLI/CLI.hpp>
+#include <magic_enum.hpp>
 
 #include <filesystem>
 
@@ -29,6 +30,9 @@ int main(int argc, char *argv[]) {
     for (auto &&added_element : loop.added_elements) {
       added_elements_info.push_back(sog::ElementDisplayInfo{
           .detected_type = added_element.get_type(),
+          .detected_type_name =
+              std::string{magic_enum::enum_name<sog::element_type>(
+                  added_element.get_type())},
           .native_type_name = added_element.get_native_element_type_name(),
           .native_type_enum_name =
               added_element.get_native_element_type_enum_name()});
