@@ -7,7 +7,7 @@ target_link_libraries(
   PRIVATE SndFile::sndfile fmt::fmt Microsoft.GSL::GSL OpenAL::OpenAL
   PUBLIC SOG::Utils)
 
-add_library(SOG::Sounds ALIAS Sounds_lib)
+add_library(SOG::SoundCode ALIAS Sounds_lib)
 
 if(enable_tests)
   add_subdirectory(tests)
