@@ -28,6 +28,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   find_package(Gobject-2 CONFIG REQUIRED)
 
   find_package(libxdo CONFIG REQUIRED)
+
+  find_package(libbacktrace_hack CONFIG REQUIRED)
 endif()
 
 if(enable_tests)
@@ -35,8 +37,6 @@ if(enable_tests)
 
   find_package(Catch2 3 REQUIRED)
   include(Catch)
-
-  include(BoostLinux_libbacktrace)
 endif()
 
 add_subdirectory(src)
