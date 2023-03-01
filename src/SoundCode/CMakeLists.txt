@@ -4,8 +4,8 @@ target_include_directories(Sounds_lib PUBLIC ./include)
 
 target_link_libraries(
   Sounds_lib
-  PRIVATE SndFile::sndfile fmt::fmt Microsoft.GSL::GSL
-  PUBLIC SOG::Utils OpenAL::OpenAL)
+  PRIVATE SndFile::sndfile fmt::fmt Microsoft.GSL::GSL OpenAL::OpenAL
+  PUBLIC SOG::Utils)
 
 add_library(SOG::Sounds ALIAS Sounds_lib)
 
