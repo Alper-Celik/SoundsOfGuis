@@ -9,18 +9,24 @@
 #include <filesystem>
 
 int main(int argc, char *argv[]) {
-  sog::QtUiController gui; // TODO: pass args to qt app
-                           // is that effects thread safety?
 
   std::filesystem::path config_file = sog::get_config_file();
   std::deque<std::filesystem::path> data_dirs = sog::get_data_dirs();
   CLI::App app{};
-  app.add_option("--config-file,-c", config_file, "specify config file");
+  app.add_option("--config-file,-c", config_file, "specify config file")
+      ->envname("SOG_CONFIG_FILE")
+      ->check(CLI::ExistingFile);
   app.add_option("--data-dirs,--data-dir,-d", data_dirs,
                  "set data dir(s) overrides XDG_DATA_HOME, ~/local/share/ and "
-                 "XDG_DATA_DIRS");
+                 "XDG_DATA_DIRS")
+      ->envname("SOG_DATADIRS") // NOTE: might not be able to specify multiple
+                                // dirs with env variable look into it
+      ->check(CLI::ExistingDirectory);
   CLI11_PARSE(app, argc, argv);
 
+  sog::QtUiController gui; // TODO: pass args to qt app
+                           // is that effects thread safety?
+                           // TODO: pass Qt arguments before parsing other args
   sog::MainLoop loop(config_file, data_dirs);
   while (true) {
     loop.update_gui_tree();
