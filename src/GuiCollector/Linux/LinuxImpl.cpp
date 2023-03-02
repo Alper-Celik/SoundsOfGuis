@@ -20,8 +20,10 @@ std::size_t get_gui_element_hash(AtspiAccessible *native_element) {
   std::unique_ptr<gchar, void (*)(gchar *)> accessible_id(
       atspi_accessible_get_accessible_id(native_element, nullptr),
       [](gchar *ptr) { g_free(ptr); });
-  std::size_t h1 =
-      std::hash<std::string_view>{}(std::string_view{accessible_id.get()});
+
+  std::size_t h1 = 0;
+  if (accessible_id != nullptr)
+    h1 = std::hash<std::string_view>{}(std::string_view{accessible_id.get()});
 
   std::size_t h2 = std::hash<AtspiRole>{}(
       atspi_accessible_get_role(native_element, nullptr));
