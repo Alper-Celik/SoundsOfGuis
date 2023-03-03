@@ -15,6 +15,7 @@
 , microsoft_gsl
 , fmt_9
 , spdlog
+, atkmm_2_36
 , at-spi2-core
 , xdotool
 , qtbase
@@ -47,6 +48,7 @@
     fmt_9
     spdlog
 
+    atkmm_2_36
     at-spi2-core
     xdotool
 
