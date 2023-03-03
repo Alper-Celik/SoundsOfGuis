@@ -36,6 +36,7 @@ if(enable_tests)
   include(CTest)
 
   find_package(Catch2 3 REQUIRED)
+  find_package(AtkMM REQUIRED)
   include(Catch)
 endif()
 
