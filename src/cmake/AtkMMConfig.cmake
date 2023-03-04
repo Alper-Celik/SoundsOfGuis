@@ -1,4 +1,4 @@
 find_package(PkgConfig REQUIRED)
-pkg_search_module(ATKMM REQUIRED IMPORTED_TARGET libxdo)
+pkg_check_modules(ATKMM REQUIRED IMPORTED_TARGET atkmm-2.36)
 
 add_library(AtkMM::AtkMM ALIAS PkgConfig::ATKMM)
