@@ -4,10 +4,14 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, pre-commit-hooks, ... }:
     flake-utils.lib.eachSystem (with flake-utils.lib ;[ system.x86_64-linux system.aarch64-linux ])
       (system:
         let
@@ -53,8 +57,18 @@
               ];
             });
         in
-        {
 
+        {
+          checks = {
+            pre-commit-check = pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks = {
+                nixpkgs-fmt.enable = true;
+                clang-format.enable = true;
+                taplo.enable = true;
+              };
+            };
+          };
           devShells =
             {
               default = (pkgs.libsForQt5.callPackage ./default.nix {
@@ -66,6 +80,8 @@
                   QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
                   QT_ACCESSIBILITY = 1;
                   QT_QPA_PLATFORM_PLUGIN_PATH = "${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
+                  inherit (self.checks.${system}.pre-commit-check) shellHook;
+
                 }
               );
             };

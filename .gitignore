@@ -3,5 +3,8 @@ Testing
 
 .direnv
 
+# genereted by nix
+.pre-commit-config.yaml
+
 #TODO: create proper configrations
 .vscode 
