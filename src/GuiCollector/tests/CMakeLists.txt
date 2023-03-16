@@ -6,8 +6,7 @@ macro(add_catch_test file_name)
     SOG::GuiCollector
     Qt5::Widgets
     Qt5::Qml
-    Qt5::Core
-    AtkMM::AtkMM)
+    Qt5::Core)
 
   cmake_path(CONVERT "${CMAKE_CURRENT_SOURCE_DIR}/test_metarial"
              TO_NATIVE_PATH_LIST test_metarial)
