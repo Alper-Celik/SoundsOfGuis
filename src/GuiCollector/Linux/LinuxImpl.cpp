@@ -139,14 +139,18 @@ Point2<int> GuiCollector::get_mouse_pos() {
 std::optional<GuiElement> GuiCollector::get_control_at_pos(Point2<int> pos) {
   int application_count = atspi_accessible_get_child_count(desktop, nullptr);
 
-  for (int application_index = 0; application_index < application_count;
-       application_index++) {
+  // NOTE: using reverse iteration for looping since it last app is likely what
+  // we want
+  for (int application_index = application_count - 1; 0 <= application_index;
+       application_index--) {
     GuiElement application = atspi_accessible_get_child_at_index(
         desktop, application_index, nullptr);
 
     int window_count =
         atspi_accessible_get_child_count(application.get_handle(), nullptr);
-    for (int window_index = 0; window_index < window_count; window_index++) {
+    for (int window_index = 0; window_index < window_count;
+         window_index++) { // NOTE: maybe do reverse iteration for getting last
+                           // windpw
       GuiElement window = atspi_accessible_get_child_at_index(
           application.get_handle(), window_index, nullptr);
 
