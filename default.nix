@@ -5,6 +5,7 @@
 , wrapQtAppsHook
 
 , tomlplusplus
+, yaml-cpp
 , cli11
 , magic-enum
 , libsndfile
@@ -32,6 +33,7 @@
   ];
   buildInputs = [
     tomlplusplus
+    yaml-cpp
     cli11
     magic-enum
 
