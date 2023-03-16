@@ -66,7 +66,7 @@
                 nixpkgs-fmt.enable = true;
                 clang-format.enable = true;
                 taplo.enable = true;
-                yamllint.enable = true;
+                prettier.enable = true;
               };
             };
           };
