@@ -1,0 +1,21 @@
+data_dirs: &data_d
+  - sounds
+  - sounds/more_sounds
+  - sounds2
+additional_data_dirs: *data_d
+
+list:
+  sound_file: test/list.wav
+  looping: true
+  distance_to_other:
+    x: 1
+    y: 2
+    z: 0
+
+listitem:
+  sound_file: "item_of_list"
+
+  distance_to_other: 3
+
+unknown_element:
+  distance_to_other: 0.5

@@ -16,6 +16,9 @@ find_package(Microsoft.GSL CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
 find_package(CLI11 CONFIG REQUIRED)
 
+find_package(tomlplusplus CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
+
 find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets Qml Quick Core)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
