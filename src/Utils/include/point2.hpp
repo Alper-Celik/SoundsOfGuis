@@ -1,4 +1,6 @@
 #pragma once
+#include <yaml-cpp/yaml.h>
+
 namespace sog {
 template <typename T = float> struct Point2 {
   T x = 0, y = 0;
@@ -37,3 +39,33 @@ template <typename T = float> struct Point2 {
   bool operator!=(const Point2<T> &) const = default;
 };
 } // namespace sog
+
+namespace YAML {
+template <typename T> struct convert<sog::Point2<T>> {
+  static Node encode(const sog::Point2<T> &rhs) {
+    Node node;
+    node["x"] = rhs.x;
+    node["y"] = rhs.y;
+    return node;
+  }
+
+  static bool decode(const Node &node, sog::Point2<T> &rhs) {
+
+    // verify
+    if (not node.IsMap() and node.size() != 2)
+      return false;
+
+    std::array<std::string, 3> valid_ids{"x", "y"};
+    for (auto i : node) {
+      if (std::find(begin(valid_ids), end(valid_ids),
+                    i.first.as<std::string>()) == end(valid_ids))
+        return false;
+    }
+
+    // write
+    rhs.x = node["x"];
+    rhs.y = node["y"];
+    return true;
+  }
+};
+}; // namespace YAML
