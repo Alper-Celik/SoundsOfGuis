@@ -23,7 +23,7 @@ TEST_CASE("parse_config tests") {
   CHECK(list_cfg.sound_file == metarial_dir / "sounds" / "test" / "list.wav");
   CHECK(list_cfg.element_info.is_looping == true);
   CHECK(list_cfg.element_info.distance_to_other ==
-        sog::Point3{.x = 1, .y = 2, .z = 0});
+        sog::Point3<float>{.x = 1, .y = 2, .z = 0});
 
   // undefined elements
   auto window_cfg = config.at(sog::element_type::window);

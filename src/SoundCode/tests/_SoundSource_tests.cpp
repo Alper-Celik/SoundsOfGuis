@@ -95,7 +95,7 @@ TEST_CASE("position test", "[internal][SoundCode]") {
   SoundManager s; // initilize al context
 
   SoundSource s1;
-  CHECK(s1.get_position() == Point3{0, 0, 0});
+  CHECK(s1.get_position() == Point3<float>{0, 0, 0});
   s1.set_position({1, 2, 3});
-  CHECK(s1.get_position() == Point3{1, 2, 3});
+  CHECK(s1.get_position() == Point3<float>{1, 2, 3});
 }

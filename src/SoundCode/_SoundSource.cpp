@@ -76,12 +76,12 @@ bool SoundSource::is_looping() {
   return is_looping;
 }
 
-void SoundSource::set_position(Point3 pos) {
+void SoundSource::set_position(Point3<float> pos) {
   alSource3f(source_handle, AL_POSITION, pos.x, pos.y, pos.z);
   sog::al_check_error();
 }
-Point3 SoundSource::get_position() {
-  Point3 out;
+Point3<float> SoundSource::get_position() {
+  Point3<float> out;
   alGetSource3f(source_handle, AL_POSITION, &out.x, &out.y, &out.z);
   sog::al_check_error();
   return out;

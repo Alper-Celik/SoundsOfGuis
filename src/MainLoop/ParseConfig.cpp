@@ -25,7 +25,8 @@ get_element_info(toml::node_view<toml::node> table,
 
     } else if (distance_to_other.is_table()) {
 
-      Point3 default_distance = default_info.element_info.distance_to_other;
+      Point3<float> default_distance =
+          default_info.element_info.distance_to_other;
       info.element_info.distance_to_other = {
           .x = distance_to_other["x"].value_or(default_distance.x),
           .y = distance_to_other["y"].value_or(default_distance.y),

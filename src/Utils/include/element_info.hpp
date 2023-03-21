@@ -6,7 +6,7 @@
 
 namespace sog {
 struct ElementInfo {
-  Point3 distance_to_other = {0, 0, 0};
+  Point3<float> distance_to_other = {0, 0, 0};
   bool is_looping = false;
 };
 

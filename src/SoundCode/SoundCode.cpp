@@ -109,7 +109,7 @@ void SoundManager::refresh_sounds() {
     alcProcessContext(alcGetCurrentContext());
   }); // resume context at end of scope or at exception
 
-  Point3 last_pos{0, 0, 0};
+  Point3<float> last_pos{0, 0, 0};
   for (auto &[name, info, source] : boost::adaptors::reverse(elements)) {
     source.set_position(last_pos);
     last_pos += info.distance_to_other;
