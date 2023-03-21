@@ -16,4 +16,4 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: "checks linux and pre commit"
-        run: nix flake check
+        run: nix flake check --print-build-logs --quiet
