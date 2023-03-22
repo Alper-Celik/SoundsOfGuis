@@ -46,12 +46,8 @@ template <typename T> struct convert<sog::Point3<T>> {
     if (not node.IsMap() and node.size() != 3)
       return false;
 
-    std::array<std::string, 3> valid_ids{"x", "y", "z"};
-    for (auto i : node) {
-      if (std::find(begin(valid_ids), end(valid_ids),
-                    i.first.as<std::string>()) == end(valid_ids))
-        return false;
-    }
+    if (not(node["x"] and node["y"] and node["z"]))
+      return false;
 
     // write
     rhs.x = node["x"];
