@@ -24,7 +24,7 @@ template <> struct convert<sog::CompleteElementInfo> {
   static Node encode(const sog::CompleteElementInfo &rhs) {
     Node node;
     if (rhs.sound_file)
-      node["sound_file"] = *rhs.sound_file;
+      node["sound_file"] = rhs.sound_file->string();
     node["looping"] = rhs.element_info.is_looping;
     node["distance_to_other"] = rhs.element_info.distance_to_other;
     return node;

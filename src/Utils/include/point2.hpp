@@ -59,8 +59,8 @@ template <typename T> struct convert<sog::Point2<T>> {
       return false;
 
     // write
-    rhs.x = node["x"];
-    rhs.y = node["y"];
+    rhs.x = node["x"].as<T>();
+    rhs.y = node["y"].as<T>();
     return true;
   }
 };

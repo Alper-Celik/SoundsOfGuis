@@ -50,9 +50,9 @@ template <typename T> struct convert<sog::Point3<T>> {
       return false;
 
     // write
-    rhs.x = node["x"];
-    rhs.y = node["y"];
-    rhs.z = node["z"];
+    rhs.x = node["x"].as<T>();
+    rhs.y = node["y"].as<T>();
+    rhs.z = node["z"].as<T>();
     return true;
   }
 };

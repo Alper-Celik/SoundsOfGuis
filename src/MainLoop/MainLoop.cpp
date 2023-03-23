@@ -13,10 +13,9 @@ namespace sog {
 
 MainLoop::MainLoop(std::filesystem::path config_file,
                    std::deque<std::filesystem::path> data_dirs) {
-  std::unordered_map<sog::element_type, sog::CompleteElementInfo> config =
-      parse_config(config_file, data_dirs);
+  sog::config config = parse_config(config_file, data_dirs);
 
-  for (auto [type, info] : config) {
+  for (auto [type, info] : config.element_infos) {
     sound_manger.load_element(type, info.element_info, info.sound_file);
   }
 }
