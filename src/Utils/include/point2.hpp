@@ -1,5 +1,5 @@
 #pragma once
-#include <yaml-cpp/yaml.h>
+// #include <yaml-cpp/yaml.h>
 
 namespace sog {
 template <typename T = float> struct Point2 {
@@ -39,29 +39,29 @@ template <typename T = float> struct Point2 {
   bool operator!=(const Point2<T> &) const = default;
 };
 } // namespace sog
-
-namespace YAML {
-template <typename T> struct convert<sog::Point2<T>> {
-  static Node encode(const sog::Point2<T> &rhs) {
-    Node node;
-    node["x"] = rhs.x;
-    node["y"] = rhs.y;
-    return node;
-  }
-
-  static bool decode(const Node &node, sog::Point2<T> &rhs) {
-
-    // verify
-    if (not node.IsMap() and node.size() != 2)
-      return false;
-
-    if (not(node["x"] and node["y"]))
-      return false;
-
-    // write
-    rhs.x = node["x"];
-    rhs.y = node["y"];
-    return true;
-  }
-};
-}; // namespace YAML
+//
+// namespace YAML {
+// template <typename T> struct convert<sog::Point2<T>> {
+//   static Node encode(const sog::Point2<T> &rhs) {
+//     Node node;
+//     node["x"] = rhs.x;
+//     node["y"] = rhs.y;
+//     return node;
+//   }
+//
+//   static bool decode(const Node &node, sog::Point2<T> &rhs) {
+//
+//     // verify
+//     if (not node.IsMap() and node.size() != 2)
+//       return false;
+//
+//     if (not(node["x"] and node["y"]))
+//       return false;
+//
+//     // write
+//     rhs.x = node["x"];
+//     rhs.y = node["y"];
+//     return true;
+//   }
+// };
+// }; // namespace YAML
