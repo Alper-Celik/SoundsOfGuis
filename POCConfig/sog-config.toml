@@ -1,0 +1,17 @@
+additional_data_dirs = ["sounds"]
+
+[window]
+sound_file = "window.ogg"
+
+[list]
+sound_file = "list.ogg"
+looping = true
+distance_to_other = 1
+
+[listitem]
+sound_file = "listitem.ogg"
+distamce_to_other = 0
+
+[button]
+sound_file = "button.ogg"
+distamce_to_other = 1
