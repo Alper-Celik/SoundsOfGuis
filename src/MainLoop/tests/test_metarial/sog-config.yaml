@@ -1,8 +1,9 @@
-data_dirs: &data_d
+data_dirs:
   - sounds
   - sounds/more_sounds
   - sounds2
-additional_data_dirs: *data_d
+
+# additional_data_dirs: *data_d
 
 list:
   sound_file: test/list.wav
@@ -19,3 +20,8 @@ listitem:
 
 unknown_element:
   distance_to_other: 0.5
+
+# config for elements not defined in config file
+undefined_element:
+  distance_to_other: .75
+# window uses undefined element
