@@ -51,9 +51,13 @@ template <> struct convert<sog::CompleteElementInfo> {
     if (auto looping = node["looping"]; looping)
       rhs.element_info.is_looping = looping.as<bool>();
 
-    if (auto distance_to_other = node["distance_to_other"]; distance_to_other)
-      rhs.element_info.distance_to_other =
-          distance_to_other.as<sog::Point3<float>>();
+    if (auto distance_to_other = node["distance_to_other"]; distance_to_other) {
+      if (distance_to_other.IsMap())
+        rhs.element_info.distance_to_other =
+            distance_to_other.as<sog::Point3<float>>();
+      else
+        rhs.element_info.distance_to_other.x = distance_to_other.as<float>();
+    }
 
     return true;
   }

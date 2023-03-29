@@ -1,19 +1,24 @@
+# dirs relative to config files to find sound files
 data_dirs:
   - sounds
   - sounds/more_sounds
   - sounds2
 
-# additional_data_dirs: *data_d
-
 list:
+  # file looked up on additional_data_dirs
+  # this gets from ./sounds/test/list.wav
   sound_file: test/list.wav
+
+  # loops sound while active
   looping: true
-  distance_to_other:
+
+  distance_to_other: # distance to last sound in 3d space
     x: 1
     y: 2
     z: 0
 
 listitem:
+  # should be ./sounds/more_sounds/item_of_list.wav
   sound_file: "item_of_list"
 
   distance_to_other: 3
@@ -24,4 +29,4 @@ unknown_element:
 # config for elements not defined in config file
 undefined_element:
   distance_to_other: .75
-# window uses undefined element
+# window uses undefined_element

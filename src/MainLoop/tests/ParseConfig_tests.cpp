@@ -11,7 +11,7 @@ fs::path metarial_dir{TEST_METARIAL_DIR};
 
 TEST_CASE("parse_config tests") {
 
-  sog::config config = sog::parse_config(metarial_dir / "sog-config.toml", {});
+  sog::config config = sog::parse_config(metarial_dir / "sog-config.yaml", {});
 
   for (sog::element_type element :
        magic_enum::enum_values<sog::element_type>()) {
