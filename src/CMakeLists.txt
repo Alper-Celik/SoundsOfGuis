@@ -14,3 +14,12 @@ add_subdirectory(MainLoop)
 
 # start of program (main()) , cli parsing ,gui
 add_subdirectory(UserInterface)
+
+install(TARGETS UserInterface DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  get_target_property(SOG_EXECUTABLE_NAME UserInterface OUTPUT_NAME)
+  configure_file(sounds-of-gui.desktop.in sounds-of-gui.desktop)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sounds-of-gui.desktop
+          DESTINATION share/applications)
+endif()

@@ -86,9 +86,9 @@
                 }
               );
             };
-          # packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
-          #   src = self;
-          # });
+          packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
+            src = self;
+          });
 
         }
       );
