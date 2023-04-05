@@ -11,17 +11,21 @@ namespace sog {
 namespace fs = std::filesystem;
 namespace yaml = YAML;
 
-sog::CompleteElementInfo get_element_info(yaml::Node table) {
-  auto info = table.as<sog::CompleteElementInfo>();
-
-  return info;
+std::optional<sog::CompleteElementInfo> get_element_info(yaml::Node table) {
+  if (table) {
+    try {
+      auto info = table.as<sog::CompleteElementInfo>();
+      return info;
+    } catch (YAML::TypedBadConversion<sog::CompleteElementInfo>) {
+    }
+  }
+  return std::nullopt;
 }
 
 std::deque<fs::path> get_data_dirs(yaml::Node data_dirs_array) {
   std::deque<fs::path> data_dirs;
-  // auto data_dirs_array = data_dirs_array.as<std::vector<std::string>>();
   for (auto &&additional_data_dir : data_dirs_array) {
-
+    // TODO :error handling
     data_dirs.push_back(additional_data_dir.as<std::string>());
   }
   return data_dirs;
@@ -33,22 +37,14 @@ parse_config(std::filesystem::path config_file,
              sog::CompleteElementInfo default_default_element_info) {
   sog::config ret_val;
 
-  // yaml::Node config;
-
-  // try {
+  // TODO : error handling
   auto config = YAML::LoadFile(std::filesystem::absolute(config_file).string());
-  // } catch (const std::filesystem::filesystem_error &err) {
-  //   // TODO:
-  //   throw;
-  // } catch (const toml::parse_error &err) {
-  //   // TODO:
-  //   throw;
-  // }
 
   auto config_data_dirs = get_data_dirs(config["data_dirs"]);
 
   sog::CompleteElementInfo undefined_element_info =
-      get_element_info(config["undefined_element"]);
+      get_element_info(config["undefined_element"])
+          .value_or(sog::CompleteElementInfo{});
 
   std::unordered_map<sog::element_type, sog::CompleteElementInfo> element_infos;
 
@@ -56,12 +52,9 @@ parse_config(std::filesystem::path config_file,
        magic_enum::enum_entries<sog::element_type>()) {
     sog::CompleteElementInfo element_info;
 
-    if (config[std::string{enum_string}]) {
-      element_infos[enum_value] =
-          get_element_info(config[std::string{enum_string}]);
-    } else {
-      element_infos[enum_value] = undefined_element_info;
-    }
+    element_infos[enum_value] =
+        get_element_info(config[std::string{enum_string}])
+            .value_or(undefined_element_info);
   }
   ret_val.element_infos = element_infos;
   ret_val.base_config_dir = config_file.parent_path();
