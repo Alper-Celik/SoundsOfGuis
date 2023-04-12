@@ -41,6 +41,7 @@ GuiElement::GuiElement(GuiElement &&other)
 }
 GuiElement &GuiElement::operator=(GuiElement &&other) {
   std::swap(other.native_element, native_element);
+  std::swap(other.element_hash, element_hash);
   return *this;
 };
 
