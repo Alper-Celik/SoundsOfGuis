@@ -11,9 +11,32 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v19
+      - uses: actions/cache@v3
+        id: cache-nix
         with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          path: ./nix-fs
+          key: ${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}-nix
+
+      - if: ${{ steps.cache-nix.outputs.cache-hit != 'true' }}
+        name: create filesystem in file
+        run: mke2fs -t ext4 ./nix-fs 5G
+
+      - name: mount nix-fs
+        run: |
+          sudo mkdir /nix
+          sudo mount -t ext4 ./nix-fs /nix
+          sudo chown -R `whoami` /nix
+
+      - uses: cachix/install-nix-action@v20
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          install_options: --no-daemon
       - name: "checks linux and pre commit"
-        run: nix flake check --print-build-logs --quiet
+        run: |
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix flake check --print-build-logs --quiet
+
+      - name: unmount nix-fs
+        run: |
+          sudo du -sh /nix
+          sudo umount /nix
