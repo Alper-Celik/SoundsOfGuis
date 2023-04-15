@@ -19,7 +19,7 @@ jobs:
 
       - if: ${{ steps.cache-nix.outputs.cache-hit != 'true' }}
         name: create filesystem in file
-        run: mke2fs -t ext4 ./nix-fs 5G
+        run: mke2fs -t ext4 ./nix-fs 10G # compressed when caching this is not a problem
 
       - name: mount nix-fs
         run: |
