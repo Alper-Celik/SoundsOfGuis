@@ -22,14 +22,12 @@
 , qtdeclarative
 
 , src
-, breakpointHook
 }: stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
     wrapQtAppsHook
-    # breakpointHook
   ];
   buildInputs = [
     tomlplusplus

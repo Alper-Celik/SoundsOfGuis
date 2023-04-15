@@ -20,11 +20,6 @@
               inherit system;
               overlays = [
                 (final: prev: {
-                  magic-enum = prev.magic-enum.overrideAttrs (prev: {
-                    cmakeFlags = [
-                      "-DMAGIC_ENUM_OPT_BUILD_TESTS=OFF"
-                    ];
-                  });
                   ccacheWrapper = prev.ccacheWrapper.override {
                     # from https://nixos.wiki/wiki/CCache#Non-NixOS
                     # and some modifications
@@ -59,6 +54,9 @@
         in
 
         {
+          packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
+            src = self;
+          });
           checks = {
             pre-commit-check = pre-commit-hooks.lib.${system}.run {
               src = ./.;
@@ -69,6 +67,7 @@
                 prettier.enable = true;
               };
             };
+            tests = self.outputs.packages.${system}.default;
           };
           devShells =
             {
@@ -86,10 +85,6 @@
                 }
               );
             };
-          packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
-            src = self;
-          });
-
         }
       );
 }
