@@ -36,6 +36,11 @@ jobs:
           . /home/runner/.nix-profile/etc/profile.d/nix.sh
           nix flake check --print-build-logs --quiet
 
+      - name: "build it"
+        run: |
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
+          nix build
+
       - name: unmount nix-fs
         run: |
           sudo du -sh /nix

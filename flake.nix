@@ -67,7 +67,6 @@
                 prettier.enable = true;
               };
             };
-            tests = self.outputs.packages.${system}.default;
           };
           devShells =
             {
