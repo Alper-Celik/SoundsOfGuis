@@ -39,7 +39,7 @@ jobs:
       - name: "build it"
         run: |
           . /home/runner/.nix-profile/etc/profile.d/nix.sh
-          nix build
+          nix build --print-build-logs --quiet
 
       - name: unmount nix-fs
         run: |
