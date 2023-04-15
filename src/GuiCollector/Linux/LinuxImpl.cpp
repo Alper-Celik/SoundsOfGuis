@@ -2,6 +2,7 @@
 
 #include "AtspiMappings.hpp"
 #include "ExceptionUtils.hpp"
+#include "MapUtils.hpp"
 
 #define MAGIC_ENUM_RANGE_MIN 0
 #define MAGIC_ENUM_RANGE_MAX 256
@@ -71,9 +72,20 @@ element_type GuiElement::get_type() // TODO: be smarter than map lookup
                                     // if needed
 {
   AtspiRole type = atspi_accessible_get_role(native_element, nullptr);
-  fmt::print("{}\n", magic_enum::enum_name<AtspiRole>(type));
 
-  return sog::AtspiMapping.at(type);
+  {
+    auto parent = this->get_handle().get()->accessible_parent;
+    if (parent and parent->role == ATSPI_ROLE_APPLICATION)
+      return element_type::window;
+  }
+
+  {
+    auto mapping = unordered_map_get_at(AtspiMapping, type);
+    if (mapping)
+      return mapping->get();
+  }
+
+  return element_type::unknown_element;
 }
 
 std::string GuiElement::get_native_element_type_name() {
