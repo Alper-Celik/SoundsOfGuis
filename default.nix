@@ -53,6 +53,7 @@
     qtbase
     qtdeclarative
   ];
+
   patchPhase = ''
     export CCACHE_DIR="`pwd`/.ccache"
   '';

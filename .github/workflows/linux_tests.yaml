@@ -30,18 +30,18 @@ jobs:
       - uses: cachix/install-nix-action@v20
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          install_options: --no-daemon
+
       - name: "checks linux and pre commit"
         run: |
-          . /home/runner/.nix-profile/etc/profile.d/nix.sh
           nix flake check --print-build-logs --quiet
 
       - name: "build it"
         run: |
-          . /home/runner/.nix-profile/etc/profile.d/nix.sh
           nix build --print-build-logs --quiet
 
       - name: unmount nix-fs
         run: |
+          sudo systemctl stop nix-daemon.socket
+          sudo systemctl stop nix-daemon
           sudo du -sh /nix
           sudo umount /nix
