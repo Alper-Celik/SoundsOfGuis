@@ -12,16 +12,29 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
+        id: cache-ccache
+        with:
+          path: /var/cache/ccache
+          key: ccache-${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}
+          restore-keys: |
+            ccache-
+
+      - run: |
+          sudo mkdir /var/cache/ccache
+          sudo chown -R `whoami` /var/cache/ccache
+          sudo chmod a+rwx /var/cache/ccache
+
+      - uses: actions/cache@v3
         id: cache-nix
         with:
           path: ./nix-fs
-          key: ${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}-nix
+          key: nix-${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}
 
       - if: ${{ steps.cache-nix.outputs.cache-hit != 'true' }}
         name: create filesystem in file
         run: mke2fs -t ext4 ./nix-fs 10G # compressed when caching this is not a problem
 
-      - name: mount nix-fs
+      - name: mount nix-fs and
         run: |
           sudo mkdir /nix
           sudo mount -t ext4 ./nix-fs /nix
@@ -37,11 +50,15 @@ jobs:
 
       - name: "build it"
         run: |
-          nix build --print-build-logs --quiet
+          nix build --print-build-logs --quiet  --option extra-sandbox-paths /var/cache/ccache
+
+      - run: ls /var/cache/ccache
 
       - name: unmount nix-fs
         run: |
           sudo systemctl stop nix-daemon.socket
           sudo systemctl stop nix-daemon
           sudo du -sh /nix
+          sudo chmod -R a+rwx /var/cache/ccache
+          sudo du -sh /var/cache/ccache
           sudo umount /nix

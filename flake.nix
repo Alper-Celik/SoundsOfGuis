@@ -56,6 +56,7 @@
         {
           packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
             src = self;
+            stdenv = pkgs.ccacheStdenv;
           });
           checks = {
             pre-commit-check = pre-commit-hooks.lib.${system}.run {
