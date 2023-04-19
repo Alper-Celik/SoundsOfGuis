@@ -6,10 +6,18 @@ namespace sog {
 
 inline std::unordered_map<AtspiRole, sog::element_type> AtspiMapping{
     {ATSPI_ROLE_PUSH_BUTTON, element_type::button},
+    {ATSPI_ROLE_CHECK_BOX, element_type::checkbox},
+    {ATSPI_ROLE_MENU_ITEM, element_type::menuitem},
+    {ATSPI_ROLE_SEPARATOR, element_type::separator},
 
     {ATSPI_ROLE_LIST, element_type::list},
     {ATSPI_ROLE_LIST_ITEM, element_type::listitem},
     {ATSPI_ROLE_LIST_BOX, element_type::listbox},
+
+    {ATSPI_ROLE_PAGE_TAB, element_type::tab},
+    {ATSPI_ROLE_PAGE_TAB_LIST, element_type::tablist},
+
+    {ATSPI_ROLE_LINK, element_type::link},
 
     {ATSPI_ROLE_TABLE, element_type::table},
     {ATSPI_ROLE_TABLE_CELL, element_type::cell},

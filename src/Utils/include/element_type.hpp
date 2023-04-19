@@ -11,12 +11,16 @@ enum class
       checkbox,
       link,
       menuitem,
+      separator,
       menuitemcheckbox,
       menuitemradio,
 
       listitem,
       list,
       listbox,
+
+      tab,
+      tablist,
 
       table,
       rowheader,
