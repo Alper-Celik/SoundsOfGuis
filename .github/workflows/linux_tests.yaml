@@ -32,7 +32,7 @@ jobs:
 
       - if: ${{ steps.cache-nix.outputs.cache-hit != 'true' }}
         name: create filesystem in file
-        run: mke2fs -t ext4 ./nix-fs 10G # compressed when caching this is not a problem
+        run: mke2fs -t ext4 ./nix-fs 4,608M # 4.5 gib
 
       - name: mount nix-fs and
         run: |
@@ -51,8 +51,6 @@ jobs:
       - name: "build it"
         run: |
           nix build --print-build-logs --quiet  --option extra-sandbox-paths /var/cache/ccache
-
-      - run: ls /var/cache/ccache
 
       - name: unmount nix-fs
         run: |
