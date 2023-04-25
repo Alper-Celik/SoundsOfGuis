@@ -15,6 +15,8 @@ add_subdirectory(MainLoop)
 # start of program (main()) , cli parsing ,gui
 add_subdirectory(UserInterface)
 
+# TODO: building sound files frome musicxml add_subdirectory(DefaultConfig)
+
 install(TARGETS UserInterface DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")

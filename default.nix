@@ -21,6 +21,8 @@
 , qtbase
 , qtdeclarative
 
+, musescore
+
 , src
 }: stdenv.mkDerivation {
   nativeBuildInputs = [
@@ -28,6 +30,7 @@
     ninja
     pkg-config
     wrapQtAppsHook
+    musescore
   ];
   buildInputs = [
     tomlplusplus
