@@ -7,6 +7,7 @@ namespace sog {
 inline std::unordered_map<AtspiRole, sog::element_type> AtspiMapping{
     {ATSPI_ROLE_PUSH_BUTTON, element_type::button},
     {ATSPI_ROLE_CHECK_BOX, element_type::checkbox},
+
     {ATSPI_ROLE_MENU_ITEM, element_type::menuitem},
     {ATSPI_ROLE_SEPARATOR, element_type::separator},
 
