@@ -29,11 +29,13 @@ SoundManager::SoundManager() {
 
 unsigned int load_sound(std::string sound_file_path) {
   auto error_check_sf = [](SndfileHandle &handle) {
-    if (auto err = handle.error(); err != SF_ERR_NO_ERROR) {
+    if (int err = handle.error(); err != SF_ERR_NO_ERROR) {
+      std::cerr << sf_error_number(err);
       throw_with_trace(std::runtime_error(sf_error_number(err)));
     }
   };
 
+  std::cerr << sound_file_path;
   SndfileHandle sndfile{sound_file_path};
   error_check_sf(sndfile);
 
@@ -89,8 +91,10 @@ void SoundManager::add_element(sog::element_type type) {
     // TODO: proper logging
   }
   SoundSource source{};
+  std::cerr << "test1\n";
   if (buffer.has_value()) {
-    source = SoundSource{*buffer};
+    std::cerr << "test\n";
+    source = std::move(SoundSource{*buffer});
   }
 
   elements.emplace_back(type, info, std::move(source));

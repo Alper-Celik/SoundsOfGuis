@@ -8,6 +8,7 @@
 
 #include <deque>
 #include <fstream>
+#include <iostream>
 
 namespace sog {
 
@@ -16,8 +17,14 @@ MainLoop::MainLoop(std::filesystem::path config_file,
   sog::config config = parse_config(config_file, data_dirs);
 
   for (auto [type, info] : config.element_infos) {
-    sound_manger.load_element(type, info.element_info, info.sound_file);
+    sound_manger.load_element(type, info.element_info,
+                              info.resolved_sound_file);
+    if (info.resolved_sound_file)
+      std::cerr << *info.resolved_sound_file;
   }
+  sound_manger.add_element(sog::element_type::tablist);
+  sound_manger.refresh_sounds();
+  std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 void MainLoop::update_gui_tree() {

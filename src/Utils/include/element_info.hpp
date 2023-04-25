@@ -16,6 +16,8 @@ struct ElementInfo {
 struct CompleteElementInfo {
   ElementInfo element_info;
   std::optional<std::filesystem::path> sound_file;
+  std::optional<std::filesystem::path>
+      resolved_sound_file; // not encoded in yaml
 };
 } // namespace sog
 
