@@ -91,9 +91,7 @@ void SoundManager::add_element(sog::element_type type) {
     // TODO: proper logging
   }
   SoundSource source{};
-  std::cerr << "test1\n";
   if (buffer.has_value()) {
-    std::cerr << "test\n";
     source = std::move(SoundSource{*buffer});
   }
 
