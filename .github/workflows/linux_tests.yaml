@@ -11,18 +11,19 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+
+      - run: |
+          sudo mkdir /var/cache/ccache
+          sudo chown -R `whoami` /var/cache/ccache
+          sudo chmod a+rwx /var/cache/ccache
+
+      - uses: actions/cache@v3 #FIXME: does not effect
         id: cache-ccache
         with:
           path: /var/cache/ccache
           key: ccache-${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}
           restore-keys: |
             ccache-
-
-      - run: |
-          sudo mkdir /var/cache/ccache
-          sudo chown -R `whoami` /var/cache/ccache
-          sudo chmod a+rwx /var/cache/ccache
 
       - uses: actions/cache@v3
         id: cache-nix
