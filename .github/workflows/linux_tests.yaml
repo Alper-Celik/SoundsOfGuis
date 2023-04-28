@@ -32,7 +32,7 @@ jobs:
 
       - if: ${{ steps.cache-nix.outputs.cache-hit != 'true' }}
         name: create filesystem in file
-        run: mke2fs -t ext4 ./nix-fs 4,608M # 4.5 gib
+        run: mke2fs -t ext4 ./nix-fs 5G
 
       - name: mount nix-fs and
         run: |
