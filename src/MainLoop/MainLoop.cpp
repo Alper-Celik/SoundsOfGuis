@@ -22,9 +22,6 @@ MainLoop::MainLoop(std::filesystem::path config_file,
     if (info.resolved_sound_file)
       std::cerr << *info.resolved_sound_file;
   }
-  sound_manger.add_element(sog::element_type::tablist);
-  sound_manger.refresh_sounds();
-  std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 void MainLoop::update_gui_tree() {
