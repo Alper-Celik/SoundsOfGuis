@@ -19,12 +19,12 @@ template <typename T = float> struct Point2 {
     lhs.y /= rhs.y;
     return lhs;
   }
-  Point2<T> operator+(const Point2<T> &other) {
+  Point2<T> operator+(const Point2<T> &other) const {
     Point2<T> _out = *this;
     _out += other;
     return _out;
   };
-  Point2<T> operator-(const Point2<T> &other) {
+  Point2<T> operator-(const Point2<T> &other) const {
     Point2<T> _out = *this;
     _out -= other;
     return _out;

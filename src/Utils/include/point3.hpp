@@ -15,12 +15,34 @@ template <typename T> struct Point3 {
     z -= other.z;
     return *this;
   };
-  Point3<T> operator+(const Point3<T> &other) {
+  Point3<T> &operator*=(const Point3<T> &other) {
+    x *= other.x;
+    y *= other.y;
+    z *= other.z;
+    return *this;
+  }
+  Point3<T> &operator/=(const Point3<T> &other) {
+    x /= other.x;
+    y /= other.y;
+    z /= other.z;
+    return *this;
+  }
+  Point3<T> operator/(const Point3<T> &other) const {
+    Point3<T> _out = *this;
+    _out /= other;
+    return _out;
+  }
+  Point3<T> operator*(const Point3<T> &other) const {
+    Point3<T> _out = *this;
+    _out *= other;
+    return _out;
+  }
+  Point3<T> operator+(const Point3<T> &other) const {
     Point3<T> _out = *this;
     _out += other;
     return _out;
   };
-  Point3<T> operator-(const Point3<T> &other) {
+  Point3<T> operator-(const Point3<T> &other) const {
     Point3<T> _out = *this;
     _out -= other;
     return _out;

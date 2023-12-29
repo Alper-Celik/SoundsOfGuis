@@ -1,5 +1,6 @@
 #pragma once
 
+#include "defs.h"
 #include "point3.hpp"
 
 #include <yaml-cpp/yaml.h>
@@ -28,7 +29,10 @@ template <> struct convert<sog::CompleteElementInfo> {
     if (rhs.sound_file)
       node["sound_file"] = rhs.sound_file->string();
     node["looping"] = rhs.element_info.is_looping;
-    node["distance_to_other"] = rhs.element_info.distance_to_other;
+    node["distance_to_other"] =
+        rhs.element_info.distance_to_other /
+        sog::Point3<float>{distance_multiplier, distance_multiplier,
+                           distance_multiplier};
     return node;
   }
 
@@ -56,9 +60,12 @@ template <> struct convert<sog::CompleteElementInfo> {
     if (auto distance_to_other = node["distance_to_other"]; distance_to_other) {
       if (distance_to_other.IsMap())
         rhs.element_info.distance_to_other =
-            distance_to_other.as<sog::Point3<float>>();
+            distance_to_other.as<sog::Point3<float>>() *
+            sog::Point3<float>{distance_multiplier, distance_multiplier,
+                               distance_multiplier};
       else
-        rhs.element_info.distance_to_other.x = distance_to_other.as<float>();
+        rhs.element_info.distance_to_other.x =
+            distance_to_other.as<float>() * distance_multiplier;
     }
 
     return true;

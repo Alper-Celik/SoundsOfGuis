@@ -1,0 +1,24 @@
+data_dirs:
+  - sounds
+
+list:
+  sound_file: list.wav
+  looping: true
+  distance_to_other: 1
+listitem:
+  sound_file: listitem.wav
+  distance_to_other: .2
+
+tablist:
+  sound_file: tablist.wav
+  distance_to_other: 1
+tab:
+  sound_file: tab.wav
+  distance_to_other: .2
+
+button:
+  sound_file: button.wav
+  distance_to_other: 1.2
+link:
+  sound_file: link.wav
+  distance_to_other: 1.2
