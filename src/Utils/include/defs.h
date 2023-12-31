@@ -1,2 +1,2 @@
 #pragma once
-constexpr float distance_multiplier = 2;
+constexpr float distance_multiplier = 1;
