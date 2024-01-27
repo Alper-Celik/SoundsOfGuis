@@ -19,7 +19,7 @@ find_package(CLI11 CONFIG REQUIRED)
 find_package(tomlplusplus CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 
-find_package(Qt5 CONFIG REQUIRED COMPONENTS Widgets Qml Quick Core)
+find_package(Qt6 CONFIG REQUIRED COMPONENTS Widgets Qml Quick Core)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)

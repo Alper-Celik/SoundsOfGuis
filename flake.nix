@@ -54,7 +54,7 @@
         in
 
         {
-          packages.default = (pkgs.libsForQt5.callPackage ./default.nix {
+          packages.default = (pkgs.qt6Packages.callPackage ./default.nix {
             src = self;
             stdenv = pkgs.ccacheStdenv;
           });
@@ -71,7 +71,7 @@
           };
           devShells =
             {
-              default = (pkgs.libsForQt5.callPackage ./default.nix {
+              default = (pkgs.qt6Packages.callPackage ./default.nix {
                 src = self;
                 # mkDerivation = pkgs.mkShell;
                 stdenv = pkgs.ccacheStdenv;
@@ -79,7 +79,7 @@
                 oldAttrs: {
                   QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
                   QT_ACCESSIBILITY = 1;
-                  QT_PLUGIN_PATH = "${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
+                  # QT_PLUGIN_PATH = "${pkgs.qt6.qtdeclarative.bin}/lib/qt-${pkgs.qt6.qtbase.version}/plugins";
                   inherit (self.checks.${system}.pre-commit-check) shellHook;
 
                 }
