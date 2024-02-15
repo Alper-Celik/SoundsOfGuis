@@ -2,7 +2,7 @@
   description = "experimental accessiblity project (deneysel erişilebilirlik projesi)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -79,9 +79,8 @@
                 oldAttrs: {
                   QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
                   QT_ACCESSIBILITY = 1;
-                  # QT_PLUGIN_PATH = "${pkgs.qt6.qtdeclarative.bin}/lib/qt-${pkgs.qt6.qtbase.version}/plugins";
+                  QT_PLUGIN_PATH = "${pkgs.qt6.qtdeclarative}/lib/qt-${pkgs.qt6.qtbase.version}/plugins";
                   inherit (self.checks.${system}.pre-commit-check) shellHook;
-
                 }
               );
             };
