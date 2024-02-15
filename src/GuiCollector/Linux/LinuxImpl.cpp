@@ -74,8 +74,9 @@ element_type GuiElement::get_type() // TODO: be smarter than map lookup
   AtspiRole type = atspi_accessible_get_role(native_element, nullptr);
 
   {
-    auto parent = this->get_handle().get()->accessible_parent;
-    if (parent and parent->role == ATSPI_ROLE_APPLICATION)
+    auto parent = this->get_parent();
+    if (this->get_handle()->role == ATSPI_ROLE_FRAME and parent and
+        parent->get_handle()->role == ATSPI_ROLE_APPLICATION)
       return element_type::window;
   }
 
