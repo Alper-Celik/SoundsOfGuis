@@ -1,4 +1,5 @@
 #pragma once
+#include "GuiCollector.hpp"
 #include "element_type.hpp"
 #include "point2.hpp"
 
@@ -7,11 +8,12 @@
 #include <gsl/pointers>
 
 #include <atomic>
+#include <memory>
 #include <optional>
 #include <thread>
 
 namespace sog {
-class GuiElement {
+class GuiElementAtspi2 : public GuiElement {
 public:
   using native_hadle_t = AtspiAccessible *;
 
@@ -22,21 +24,22 @@ private:
                     //  only use it for not equels and do more tests for
                     //  equality
 public:
-  GuiElement(AtspiAccessible *native_element);
+  GuiElementAtspi2(AtspiAccessible *native_element);
 
-  ~GuiElement();
-  GuiElement(GuiElement &&other);
-  GuiElement &operator=(GuiElement &&other);
+  ~GuiElementAtspi2();
+  GuiElementAtspi2(GuiElementAtspi2 &&other);
+  GuiElementAtspi2 &operator=(GuiElementAtspi2 &&other);
 
-  GuiElement &operator=(const GuiElement &);
-  GuiElement(const GuiElement &);
+  GuiElementAtspi2 &operator=(const GuiElementAtspi2 &);
+  GuiElementAtspi2(const GuiElementAtspi2 &);
 
-  std::optional<GuiElement> get_parent();
-  element_type get_type();
-  std::string get_native_element_type_name();
-  std::string get_native_element_type_enum_name();
+  std::unique_ptr<GuiElement> get_parent() override;
+  element_type get_type() override;
+  std::string get_native_element_type_name() override;
+  std::string get_native_element_type_enum_name() override;
+  bool operator==(const GuiElementAtspi2 &other) override;
+
   gsl::not_null<native_hadle_t> get_handle() const;
-  bool operator==(const GuiElement &other);
 };
 
 class GuiCollector {
@@ -49,6 +52,6 @@ public:
   GuiCollector();
   Point2<int> get_mouse_pos();
   void set_mouse_pos(Point2<int> pos);
-  std::optional<GuiElement> get_control_at_pos(Point2<int> pos);
+  std::optional<GuiElementAtspi2> get_control_at_pos(Point2<int> pos);
 };
 } // namespace sog

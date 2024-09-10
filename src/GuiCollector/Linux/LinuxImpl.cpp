@@ -1,8 +1,9 @@
-#include "GuiCollector.hpp"
+#include "GuiCollectorAtspi2.hpp"
 
 #include "AtspiMappings.hpp"
 #include "ExceptionUtils.hpp"
 #include "MapUtils.hpp"
+#include <memory>
 
 #define MAGIC_ENUM_RANGE_MIN 0
 #define MAGIC_ENUM_RANGE_MAX 256
@@ -32,25 +33,25 @@ std::size_t get_gui_element_hash(AtspiAccessible *native_element) {
   return h1 + h2;
 }
 
-GuiElement::GuiElement(AtspiAccessible *native_element)
+GuiElementAtspi2::GuiElementAtspi2(AtspiAccessible *native_element)
     : native_element(native_element) {
   element_hash = get_gui_element_hash(get_handle());
 };
-GuiElement::GuiElement(GuiElement &&other)
+GuiElementAtspi2::GuiElementAtspi2(GuiElementAtspi2 &&other)
     : native_element(other.native_element), element_hash(other.element_hash) {
   g_object_ref(native_element.get());
 }
-GuiElement &GuiElement::operator=(GuiElement &&other) {
+GuiElementAtspi2 &GuiElementAtspi2::operator=(GuiElementAtspi2 &&other) {
   std::swap(other.native_element, native_element);
   std::swap(other.element_hash, element_hash);
   return *this;
 };
 
-GuiElement::GuiElement(const GuiElement &other)
+GuiElementAtspi2::GuiElementAtspi2(const GuiElementAtspi2 &other)
     : native_element(other.native_element), element_hash(other.element_hash) {
   g_object_ref(native_element.get());
 }
-GuiElement &GuiElement::operator=(const GuiElement &other) {
+GuiElementAtspi2 &GuiElementAtspi2::operator=(const GuiElementAtspi2 &other) {
   g_object_unref(native_element);
   native_element = other.native_element;
   element_hash = other.element_hash;
@@ -58,18 +59,18 @@ GuiElement &GuiElement::operator=(const GuiElement &other) {
   return *this;
 }
 
-std::optional<GuiElement> GuiElement::get_parent() {
+std::unique_ptr<GuiElement> GuiElementAtspi2::get_parent() {
   auto element = atspi_accessible_get_parent(native_element, nullptr);
   if (element == nullptr)
-    return std::nullopt;
+    return nullptr;
   else
-    return element;
+    return new GuiElementAtspi2(element);
 }
 
-element_type GuiElement::get_type() // TODO: be smarter than map lookup
-                                    // like first frame is window but others are
-                                    // freme etc and take toolkit into account
-                                    // if needed
+element_type GuiElementAtspi2::get_type() // TODO: be smarter than map lookup
+                                          // like first frame is window but
+                                          // others are freme etc and take
+                                          // toolkit into account if needed
 {
   AtspiRole type = atspi_accessible_get_role(native_element, nullptr);
 
@@ -89,20 +90,21 @@ element_type GuiElement::get_type() // TODO: be smarter than map lookup
   return element_type::unknown_element;
 }
 
-std::string GuiElement::get_native_element_type_name() {
+std::string GuiElementAtspi2::get_native_element_type_name() {
   return std::string{atspi_accessible_get_role_name(native_element, nullptr)};
 };
 
-std::string GuiElement::get_native_element_type_enum_name() {
+std::string GuiElementAtspi2::get_native_element_type_enum_name() {
   return std::string{magic_enum::enum_name(
       atspi_accessible_get_role(native_element, nullptr))};
 }
 
-gsl::not_null<GuiElement::native_hadle_t> GuiElement::get_handle() const {
+gsl::not_null<GuiElementAtspi2::native_hadle_t>
+GuiElementAtspi2::get_handle() const {
   return native_element;
 }
 
-bool GuiElement::operator==(const GuiElement &other) {
+bool GuiElementAtspi2::operator==(const GuiElementAtspi2 &other) {
 
   if (element_hash != other.element_hash) {
     return false;
@@ -123,7 +125,7 @@ bool GuiElement::operator==(const GuiElement &other) {
   return is_extents_same;
 }
 
-GuiElement::~GuiElement() { g_object_unref(native_element); }
+GuiElementAtspi2::~GuiElementAtspi2() { g_object_unref(native_element); }
 
 GuiCollector::GuiCollector()
     : desktop(atspi_get_desktop(
@@ -150,14 +152,15 @@ Point2<int> GuiCollector::get_mouse_pos() {
   xdo_get_mouse_location(static_cast<xdo_t *>(xdo.get()), &x, &y, &screen);
   return {x, y};
 }
-std::optional<GuiElement> GuiCollector::get_control_at_pos(Point2<int> pos) {
+std::optional<GuiElementAtspi2>
+GuiCollector::get_control_at_pos(Point2<int> pos) {
   int application_count = atspi_accessible_get_child_count(desktop, nullptr);
 
   // NOTE: using reverse iteration for looping since it last app is likely what
   // we want
   for (int application_index = application_count - 1; 0 <= application_index;
        application_index--) {
-    GuiElement application = atspi_accessible_get_child_at_index(
+    GuiElementAtspi2 application = atspi_accessible_get_child_at_index(
         desktop, application_index, nullptr);
 
     int window_count =
@@ -165,7 +168,7 @@ std::optional<GuiElement> GuiCollector::get_control_at_pos(Point2<int> pos) {
     for (int window_index = 0; window_index < window_count;
          window_index++) { // NOTE: maybe do reverse iteration for getting last
                            // windpw
-      GuiElement window = atspi_accessible_get_child_at_index(
+      GuiElementAtspi2 window = atspi_accessible_get_child_at_index(
           application.get_handle(), window_index, nullptr);
 
       auto window_component =

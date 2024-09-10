@@ -26,10 +26,10 @@ MainLoop::MainLoop(std::filesystem::path config_file,
 
 void MainLoop::update_gui_tree() {
   Point2<int> mouse_pos = gui_collector.get_mouse_pos();
-  std::optional<GuiElement> element_under_cursor =
+  std::optional<GuiElementAtspi2> element_under_cursor =
       gui_collector.get_control_at_pos(mouse_pos);
 
-  std::deque<sog::GuiElement>
+  std::deque<sog::GuiElementAtspi2>
       new_added_elements; // create new deque to protect classes
                           // integrity in case of exception
 
