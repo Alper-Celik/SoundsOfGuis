@@ -1,5 +1,5 @@
 #pragma once
-#include "GuiCollector.hpp"
+#include "GuiElement.hpp"
 #include "point2.hpp"
 #include <Qt>
 #include <QtQml>

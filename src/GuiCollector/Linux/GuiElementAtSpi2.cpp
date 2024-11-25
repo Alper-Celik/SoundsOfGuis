@@ -1,21 +1,14 @@
-#include "GuiCollectorAtspi2.hpp"
+#include "GuiElementAtspi2.hpp"
 
 #include "AtspiMappings.hpp"
-#include "ExceptionUtils.hpp"
 #include "MapUtils.hpp"
 #include <memory>
 
 #define MAGIC_ENUM_RANGE_MIN 0
 #define MAGIC_ENUM_RANGE_MAX 256
 #include <atspi/atspi.h>
-#include <fmt/format.h>
 #include <gsl/gsl_util>
 #include <magic_enum.hpp>
-#include <xdo.h>
-
-#include <string_view>
-
-/// TODO : add proper error handling of At-spi
 
 namespace sog {
 std::size_t get_gui_element_hash(AtspiAccessible *native_element) {
@@ -64,7 +57,7 @@ std::unique_ptr<GuiElement> GuiElementAtspi2::get_parent() {
   if (element == nullptr)
     return nullptr;
   else
-    return new GuiElementAtspi2(element);
+    return std::unique_ptr<GuiElement>(new GuiElementAtspi2(element));
 }
 
 element_type GuiElementAtspi2::get_type() // TODO: be smarter than map lookup
@@ -75,7 +68,8 @@ element_type GuiElementAtspi2::get_type() // TODO: be smarter than map lookup
   AtspiRole type = atspi_accessible_get_role(native_element, nullptr);
 
   {
-    auto parent = this->get_parent();
+    auto _parent = this->get_parent();
+    auto parent = dynamic_cast<GuiElementAtspi2 *>(_parent.get());
     if (this->get_handle()->role == ATSPI_ROLE_FRAME and parent and
         parent->get_handle()->role == ATSPI_ROLE_APPLICATION)
       return element_type::window;
@@ -104,7 +98,8 @@ GuiElementAtspi2::get_handle() const {
   return native_element;
 }
 
-bool GuiElementAtspi2::operator==(const GuiElementAtspi2 &other) {
+bool GuiElementAtspi2::operator==(const GuiElement &_other) {
+  auto other = dynamic_cast<const GuiElementAtspi2 &>(_other);
 
   if (element_hash != other.element_hash) {
     return false;
@@ -126,68 +121,4 @@ bool GuiElementAtspi2::operator==(const GuiElementAtspi2 &other) {
 }
 
 GuiElementAtspi2::~GuiElementAtspi2() { g_object_unref(native_element); }
-
-GuiCollector::GuiCollector()
-    : desktop(atspi_get_desktop(
-          0) // atspi-2 curruntly doesn't implement virtual desktops
-              ),
-      xdo(xdo_new(nullptr)) {
-  // TODO: enable accessiblity from dbus
-  if (atspi_is_initialized() == false) {
-    atspi_init();
-  }
-}
-
-GuiCollector::~GuiCollector() {
-  g_object_unref(desktop);
-  xdo_free(static_cast<xdo_t *>(xdo.get()));
-}
-
-void GuiCollector::set_mouse_pos(Point2<int> pos) {
-  atspi_generate_mouse_event(pos.x, pos.y, "abs", nullptr);
-}
-
-Point2<int> GuiCollector::get_mouse_pos() {
-  int screen, x, y;
-  xdo_get_mouse_location(static_cast<xdo_t *>(xdo.get()), &x, &y, &screen);
-  return {x, y};
-}
-std::optional<GuiElementAtspi2>
-GuiCollector::get_control_at_pos(Point2<int> pos) {
-  int application_count = atspi_accessible_get_child_count(desktop, nullptr);
-
-  // NOTE: using reverse iteration for looping since it last app is likely what
-  // we want
-  for (int application_index = application_count - 1; 0 <= application_index;
-       application_index--) {
-    GuiElementAtspi2 application = atspi_accessible_get_child_at_index(
-        desktop, application_index, nullptr);
-
-    int window_count =
-        atspi_accessible_get_child_count(application.get_handle(), nullptr);
-    for (int window_index = 0; window_index < window_count;
-         window_index++) { // NOTE: maybe do reverse iteration for getting last
-                           // windpw
-      GuiElementAtspi2 window = atspi_accessible_get_child_at_index(
-          application.get_handle(), window_index, nullptr);
-
-      auto window_component =
-          atspi_accessible_get_component_iface(window.get_handle());
-      auto free_window_component =
-          gsl::finally([&] { g_object_unref(window_component); });
-
-      AtspiAccessible *element = atspi_component_get_accessible_at_point(
-          window_component, pos.x, pos.y, ATSPI_COORD_TYPE_SCREEN, nullptr);
-
-      if (element != nullptr) {
-        return element;
-      } else if (atspi_component_contains(window_component, pos.x, pos.y,
-                                          ATSPI_COORD_TYPE_SCREEN, nullptr)) {
-        return std::move(window);
-      }
-    }
-  }
-
-  return std::nullopt;
-}
 } // namespace sog

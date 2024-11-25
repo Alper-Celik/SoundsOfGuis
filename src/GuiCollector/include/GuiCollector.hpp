@@ -1,19 +1,16 @@
 #pragma once
 
-#include "element_type.hpp"
+#include "GuiElement.hpp"
+#include "point2.hpp"
 #include <memory>
-#include <optional>
-#include <string>
 namespace sog {
-class GuiElement {
+class GuiCollector {
 public:
-  virtual ~GuiElement(){};
+  virtual ~GuiCollector(){};
 
-  virtual std::unique_ptr<GuiElement> get_parent() = 0;
-  virtual element_type get_type() = 0;
-  virtual std::string get_native_element_type_name() = 0;
-  virtual std::string get_native_element_type_enum_name() = 0;
-  virtual bool operator==(const GuiElement &other) = 0;
+  virtual Point2<int> get_mouse_pos() = 0;
+  virtual void set_mouse_pos(Point2<int> pos) = 0;
+  virtual std::unique_ptr<GuiElement> get_control_at_pos(Point2<int> pos) = 0;
 };
-
+std::unique_ptr<GuiCollector> GetGuiCollector();
 }; // namespace sog
