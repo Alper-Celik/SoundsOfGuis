@@ -4,11 +4,13 @@
 
 #include <atspi/atspi.h>
 #include <gsl/pointers>
+#include <xcb/xcb.h>
 namespace sog {
 class GuiCollectorAtSpi2 : public GuiCollector {
 
   gsl::not_null<AtspiAccessible *> desktop;
-  gsl::not_null<void *> xdo;
+  xcb_connection_t *xcb_connection;
+  xcb_screen_t *xcb_default_screen;
 
 public:
   ~GuiCollectorAtSpi2();

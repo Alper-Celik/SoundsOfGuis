@@ -30,7 +30,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   find_package(Atspi-2 CONFIG REQUIRED)
   find_package(Gobject-2 CONFIG REQUIRED)
 
-  find_package(libxdo CONFIG REQUIRED)
+  find_package(xcb CONFIG REQUIRED)
 
   find_package(libbacktrace_hack CONFIG REQUIRED)
 endif()

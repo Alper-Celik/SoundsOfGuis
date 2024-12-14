@@ -6,7 +6,7 @@
 namespace sog {
 class GuiCollector {
 public:
-  virtual ~GuiCollector(){};
+  virtual ~GuiCollector() {};
 
   virtual Point2<int> get_mouse_pos() = 0;
   virtual void set_mouse_pos(Point2<int> pos) = 0;

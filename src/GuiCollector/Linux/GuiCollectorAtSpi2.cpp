@@ -5,15 +5,19 @@
 #include "GuiElement.hpp"
 #include "GuiElementAtspi2.hpp"
 #include "MapUtils.hpp"
+#include "point2.hpp"
+#include <iostream>
 #include <memory>
+#include <xcb/xproto.h>
 
 #define MAGIC_ENUM_RANGE_MIN 0
 #define MAGIC_ENUM_RANGE_MAX 256
 #include <atspi/atspi.h>
 #include <fmt/format.h>
-#include <gsl/gsl_util>
+#include <gsl/util>
 #include <magic_enum.hpp>
-#include <xdo.h>
+#include <xcb/xcb.h>
+#include <xcb/xproto.h>
 
 #include <string_view>
 
@@ -22,8 +26,19 @@ namespace sog {
 GuiCollectorAtSpi2::GuiCollectorAtSpi2()
     : desktop(atspi_get_desktop(
           0) // atspi-2 curruntly doesn't implement virtual desktops
-              ),
-      xdo(xdo_new(nullptr)) {
+      ) {
+
+  int xcb_preffered_screen_num;
+  xcb_connection = xcb_connect(NULL, &xcb_preffered_screen_num);
+
+  const auto xcb_setup = xcb_get_setup(xcb_connection);
+  auto iter = xcb_setup_roots_iterator(xcb_setup);
+
+  for (int i = 0; i < xcb_preffered_screen_num; i++) {
+    xcb_screen_next(&iter);
+  }
+  xcb_default_screen = iter.data;
+
   // TODO: enable accessibility from dbus
   if (atspi_is_initialized() == false) {
     atspi_init();
@@ -32,7 +47,7 @@ GuiCollectorAtSpi2::GuiCollectorAtSpi2()
 
 GuiCollectorAtSpi2::~GuiCollectorAtSpi2() {
   g_object_unref(desktop);
-  xdo_free(static_cast<xdo_t *>(xdo.get()));
+  xcb_disconnect(xcb_connection);
 }
 
 void GuiCollectorAtSpi2::set_mouse_pos(Point2<int> pos) {
@@ -40,9 +55,12 @@ void GuiCollectorAtSpi2::set_mouse_pos(Point2<int> pos) {
 }
 
 Point2<int> GuiCollectorAtSpi2::get_mouse_pos() {
-  int screen, x, y;
-  xdo_get_mouse_location(static_cast<xdo_t *>(xdo.get()), &x, &y, &screen);
-  return {x, y};
+  auto cookie =
+      xcb_query_pointer_unchecked(xcb_connection, xcb_default_screen->root);
+  xcb_query_pointer_reply_t *pointer_info =
+      xcb_query_pointer_reply(xcb_connection, cookie, NULL);
+
+  return {pointer_info->root_x, pointer_info->root_y};
 }
 
 std::unique_ptr<GuiElement>

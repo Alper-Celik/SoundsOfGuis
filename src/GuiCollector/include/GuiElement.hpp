@@ -7,7 +7,7 @@
 namespace sog {
 class GuiElement {
 public:
-  virtual ~GuiElement(){};
+  virtual ~GuiElement() {};
 
   virtual std::unique_ptr<GuiElement> get_parent() = 0;
   virtual element_type get_type() = 0;
