@@ -2,18 +2,20 @@
 
 #include "ExceptionUtils.hpp"
 #include "GetDirs.hpp"
+#include "GuiCollector.hpp"
 #include "ParseConfig.hpp"
 
 #include <boost/predef.h>
 
 #include <deque>
-#include <fstream>
 #include <iostream>
 
 namespace sog {
 
-MainLoop::MainLoop(std::filesystem::path config_file,
+MainLoop::MainLoop(std::unique_ptr<sog::GuiCollector> guiCollector,
+                   std::filesystem::path config_file,
                    std::deque<std::filesystem::path> data_dirs) {
+  gui_collector = std::move(guiCollector);
   sog::config config = parse_config(config_file, data_dirs);
 
   for (auto [type, info] : config.element_infos) {
@@ -25,21 +27,21 @@ MainLoop::MainLoop(std::filesystem::path config_file,
 }
 
 void MainLoop::update_gui_tree() {
-  Point2<int> mouse_pos = gui_collector.get_mouse_pos();
-  std::optional<GuiElement> element_under_cursor =
-      gui_collector.get_control_at_pos(mouse_pos);
+  Point2<int> mouse_pos = gui_collector->get_mouse_pos();
+  std::shared_ptr<GuiElement> element_under_cursor =
+      std::move(gui_collector->get_control_at_pos(mouse_pos));
 
-  std::deque<sog::GuiElement>
+  std::deque<std::shared_ptr<sog::GuiElement>>
       new_added_elements; // create new deque to protect classes
                           // integrity in case of exception
 
-  for (auto last_element = element_under_cursor; last_element.has_value();
+  for (auto last_element = element_under_cursor; last_element != nullptr;
        last_element = last_element->get_parent()) {
-    auto match_iter = std::find(begin(old_element_tree), end(old_element_tree),
-                                *last_element);
+    auto match_iter =
+        std::find(begin(old_element_tree), end(old_element_tree), last_element);
     if (match_iter == end(old_element_tree)) // does not contains
     {
-      new_added_elements.push_front(*last_element);
+      new_added_elements.push_front(last_element);
     } else {
       auto old_last_element_iter = end(old_element_tree) - 1;
       removed_element_count = old_last_element_iter - match_iter;
@@ -65,7 +67,7 @@ void MainLoop::update_sounds() {
   }
 
   for (auto &&added_element : added_elements) {
-    sound_manger.add_element(added_element.get_type());
+    sound_manger.add_element(added_element->get_type());
   }
   sound_manger.refresh_sounds();
 }

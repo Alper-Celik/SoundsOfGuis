@@ -1,7 +1,13 @@
 macro(add_catch_test file_name)
   add_executable(${file_name} ${file_name}.cpp)
-  target_link_libraries(${file_name} Catch2::Catch2WithMain SOG::GuiCollector
-                        Qt6::Widgets Qt6::Qml Qt6::Core)
+  target_link_libraries(
+    ${file_name}
+    Catch2::Catch2WithMain
+    SOG::GuiCollector
+    Qt6::Widgets
+    Qt6::Qml
+    Qt6::Core
+    atspi-2::atspi-2)
 
   cmake_path(CONVERT "${CMAKE_CURRENT_SOURCE_DIR}/test_metarial"
              TO_NATIVE_PATH_LIST test_metarial)

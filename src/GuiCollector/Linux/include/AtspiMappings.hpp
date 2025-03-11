@@ -1,5 +1,5 @@
 #pragma once
-#include "GuiCollector.hpp"
+#include "GuiElementAtspi2.hpp"
 #include <atspi/atspi.h>
 #include <unordered_map>
 namespace sog {

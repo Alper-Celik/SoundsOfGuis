@@ -1,4 +1,5 @@
 #include "GetDirs.hpp"
+#include "GuiCollector.hpp"
 #include "MainLoop.hpp"
 
 #include "QtUiController.hpp"
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
   sog::QtUiController gui; // TODO: pass args to qt app
                            // is that effects thread safety?
                            // TODO: pass Qt arguments before parsing other args
-  sog::MainLoop loop(config_file, data_dirs);
+  sog::MainLoop loop(std::move(sog::GetGuiCollector()), config_file, data_dirs);
   while (true) {
     loop.update_gui_tree();
     loop.update_sounds();
@@ -35,13 +36,13 @@ int main(int argc, char *argv[]) {
     std::vector<sog::ElementDisplayInfo> added_elements_info;
     for (auto &&added_element : loop.added_elements) {
       added_elements_info.push_back(sog::ElementDisplayInfo{
-          .detected_type = added_element.get_type(),
+          .detected_type = added_element->get_type(),
           .detected_type_name =
               std::string{magic_enum::enum_name<sog::element_type>(
-                  added_element.get_type())},
-          .native_type_name = added_element.get_native_element_type_name(),
+                  added_element->get_type())},
+          .native_type_name = added_element->get_native_element_type_name(),
           .native_type_enum_name =
-              added_element.get_native_element_type_enum_name()});
+              added_element->get_native_element_type_enum_name()});
     }
 
     gui.update_gui(added_elements_info, loop.removed_element_count);

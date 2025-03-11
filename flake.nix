@@ -80,6 +80,7 @@
                   QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
                   QT_ACCESSIBILITY = 1;
                   QT_PLUGIN_PATH = "${pkgs.qt6.qtdeclarative}/lib/qt-${pkgs.qt6.qtbase.version}/plugins";
+                  buildInputs = self.checks.${system}.pre-commit-check.enabledPackages ++ oldAttrs.buildInputs;
                   inherit (self.checks.${system}.pre-commit-check) shellHook;
                 }
               );
