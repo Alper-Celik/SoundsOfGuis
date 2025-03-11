@@ -107,7 +107,7 @@ void SoundManager::remove_last() {
 }
 void SoundManager::refresh_sounds() {
   alcSuspendContext(alcGetCurrentContext());
-  gsl::finally([] {
+  auto procces_context = gsl::finally([] {
     alcProcessContext(alcGetCurrentContext());
   }); // resume context at end of scope or at exception
 
