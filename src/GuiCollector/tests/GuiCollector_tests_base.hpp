@@ -1,8 +1,9 @@
 #pragma once
-#include "GuiElement.hpp"
+#include "GuiCollector.hpp"
 #include "point2.hpp"
 #include <Qt>
 #include <QtQml>
+#include <memory>
 #include <mutex>
 #include <qapplication.h>
 #include <qqmlapplicationengine.h>
@@ -28,7 +29,7 @@ struct gui_wrapper {
   ~gui_wrapper() { app_ptr->quit(); }
 };
 struct Gui_test_fixture {
-  sog::GuiCollector collector;
+  std::unique_ptr<sog::GuiCollector> collector;
   std::mutex gui_init_lock;
   gui_wrapper s;
   sog::Point2<int> window_pos, list_pos, list_item_pos;
@@ -92,6 +93,6 @@ Window {
     // getting positions is hacky better solutioun can be used
     // for example getting location data from gui using id's of elements
 
-    sog::GuiCollector collector;
+    collector = sog::GetGuiCollector();
   }
 };

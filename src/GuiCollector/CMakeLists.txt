@@ -8,7 +8,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 
 if(enable_tests)
-  # add_subdirectory(tests)
+  add_subdirectory(tests)
 endif()
 
 add_library(SOG::GuiCollector ALIAS GuiCollector_lib)

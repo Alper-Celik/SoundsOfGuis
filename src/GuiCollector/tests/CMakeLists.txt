@@ -4,6 +4,7 @@ macro(add_catch_test file_name)
     ${file_name}
     Catch2::Catch2WithMain
     SOG::GuiCollector
+    SOG::Utils
     Qt6::Widgets
     Qt6::Qml
     Qt6::Core

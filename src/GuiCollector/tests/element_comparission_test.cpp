@@ -6,9 +6,8 @@
 TEST_CASE_METHOD(Gui_test_fixture, "element comparission") {
   // TODO: test comaprrission for another gui element with same type
   // also check with same depth at gui tree
-  auto list_item = collector.get_control_at_pos(list_item_pos);
-  REQUIRE(list_item.has_value());
+  auto list_item = collector->get_control_at_pos(list_item_pos);
+  REQUIRE(list_item.get() != nullptr);
 
-  CHECK((list_item.value() ==
-         collector.get_control_at_pos(list_item_pos).value()));
+  CHECK((*list_item == *collector->get_control_at_pos(list_item_pos)));
 }
