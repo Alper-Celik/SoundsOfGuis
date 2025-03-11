@@ -8,18 +8,36 @@ env:
   ALSOFT_DRIVERS: "null" # no op alsoft backend
 jobs:
   tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: cachix/install-nix-action@v20
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
 
       - name: "checks linux and pre commit"
         run: |
           nix flake check --print-build-logs --quiet
 
+      - name: activate environment
+        uses: HatsuneMiku3939/direnv-action@v1
+
       - name: "build it"
         run: |
-          nix build --print-build-logs --quiet
+          mkdir build
+          cmake -B./build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+          cmake --build ./build/
+
+      - name: "set up gui environment"
+        run: |
+          export DISPLAY=:99
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          # sudo apt install plasma-workspace
+          # startplasma-x11 &
+          sleep 1
+
+      - name: "run tests"
+        run: |
+          cd build
+          ctest --output-on-failure
