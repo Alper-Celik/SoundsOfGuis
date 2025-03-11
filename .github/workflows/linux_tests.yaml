@@ -12,35 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: |
-          sudo mkdir /var/cache/ccache
-          sudo chown -R `whoami` /var/cache/ccache
-          sudo chmod a+rwx /var/cache/ccache
-
-      - uses: actions/cache@v3 #FIXME: does not effect
-        id: cache-ccache
-        with:
-          path: /var/cache/ccache
-          key: ccache-${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}
-          restore-keys: |
-            ccache-
-
-      - uses: actions/cache@v3
-        id: cache-nix
-        with:
-          path: ./nix-fs
-          key: nix-${{ runner.os }}-${{ hashFiles('./flake.*', './default.nix') }}
-
-      - if: ${{ steps.cache-nix.outputs.cache-hit != 'true' }}
-        name: create filesystem in file
-        run: mke2fs -t ext4 ./nix-fs 5G
-
-      - name: mount nix-fs and
-        run: |
-          sudo mkdir /nix
-          sudo mount -t ext4 ./nix-fs /nix
-          sudo chown -R `whoami` /nix
-
       - uses: cachix/install-nix-action@v20
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
@@ -51,13 +22,4 @@ jobs:
 
       - name: "build it"
         run: |
-          nix build --print-build-logs --quiet  --option extra-sandbox-paths /var/cache/ccache
-
-      - name: unmount nix-fs
-        run: |
-          sudo systemctl stop nix-daemon.socket
-          sudo systemctl stop nix-daemon
-          sudo du -sh /nix
-          sudo chmod -R a+rwx /var/cache/ccache
-          sudo du -sh /var/cache/ccache
-          sudo umount /nix
+          nix build --print-build-logs --quiet
