@@ -91,7 +91,7 @@ GuiCollectorAtSpi2::get_control_at_pos(Point2<int> pos) {
           window_component, pos.x, pos.y, ATSPI_COORD_TYPE_SCREEN, nullptr);
 
       if (element != nullptr) {
-        return nullptr;
+        continue;
       } else if (atspi_component_contains(window_component, pos.x, pos.y,
                                           ATSPI_COORD_TYPE_SCREEN, nullptr)) {
         return std::unique_ptr<GuiElement>(
