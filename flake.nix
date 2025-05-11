@@ -11,12 +11,24 @@
 
   };
 
-  outputs = { self, nixpkgs, flake-utils, pre-commit-hooks, ... }:
-    flake-utils.lib.eachSystem (with flake-utils.lib ;[ system.x86_64-linux system.aarch64-linux ])
-      (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      pre-commit-hooks,
+      ...
+    }:
+    flake-utils.lib.eachSystem
+      (with flake-utils.lib; [
+        system.x86_64-linux
+        system.aarch64-linux
+      ])
+      (
+        system:
         let
-          pkgs = (import nixpkgs
-            {
+          pkgs = (
+            import nixpkgs {
               inherit system;
               overlays = [
                 (final: prev: {
@@ -50,41 +62,43 @@
                   };
                 })
               ];
-            });
+            }
+          );
         in
 
         {
-          packages.default = (pkgs.qt6Packages.callPackage ./default.nix {
-            src = self;
-            stdenv = pkgs.ccacheStdenv;
-          });
+          packages.default = (
+            pkgs.qt6Packages.callPackage ./default.nix {
+              src = self;
+              stdenv = pkgs.ccacheStdenv;
+            }
+          );
           checks = {
             pre-commit-check = pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
-                nixpkgs-fmt.enable = true;
+                nixfmt-rfc-style.enable = true;
                 clang-format.enable = true;
                 taplo.enable = true;
                 prettier.enable = true;
               };
             };
           };
-          devShells =
-            {
-              default = (pkgs.qt6Packages.callPackage ./default.nix {
+          devShells = {
+            default =
+              (pkgs.qt6Packages.callPackage ./default.nix {
                 src = self;
                 # mkDerivation = pkgs.mkShell;
                 stdenv = pkgs.ccacheStdenv;
-              }).overrideAttrs (
-                oldAttrs: {
+              }).overrideAttrs
+                (oldAttrs: {
                   QT_LINUX_ACCESSIBILITY_ALWAYS_ON = 1;
                   QT_ACCESSIBILITY = 1;
                   QT_PLUGIN_PATH = "${pkgs.qt6.qtdeclarative}/lib/qt-${pkgs.qt6.qtbase.version}/plugins";
                   buildInputs = self.checks.${system}.pre-commit-check.enabledPackages ++ oldAttrs.buildInputs;
                   inherit (self.checks.${system}.pre-commit-check) shellHook;
-                }
-              );
-            };
+                });
+          };
         }
       );
 }

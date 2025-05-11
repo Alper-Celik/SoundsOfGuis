@@ -1,30 +1,32 @@
-{ stdenv
-, cmake
-, ninja
-, pkg-config
-, wrapQtAppsHook
+{
+  stdenv,
+  cmake,
+  ninja,
+  pkg-config,
+  wrapQtAppsHook,
 
-, tomlplusplus
-, yaml-cpp
-, cli11
-, magic-enum
-, libsndfile
-, openal
-, catch2_3
-, boost180
-, libbacktrace
-, microsoft_gsl
-, fmt_9
-, spdlog
-, at-spi2-core
-, xdotool
-, qtbase
-, qtdeclarative
+  tomlplusplus,
+  yaml-cpp,
+  cli11,
+  magic-enum,
+  libsndfile,
+  openal,
+  catch2_3,
+  boost180,
+  libbacktrace,
+  microsoft_gsl,
+  fmt_9,
+  spdlog,
+  at-spi2-core,
+  xdotool,
+  qtbase,
+  qtdeclarative,
 
   # , musescore
 
-, src
-}: stdenv.mkDerivation {
+  src,
+}:
+stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     ninja
